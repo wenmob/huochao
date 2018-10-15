@@ -1,15 +1,15 @@
 <template>
   <div class="cutDetails">
     <van-cell class="sk-cell">
-      <van-row type="flex">
+      <van-row>
         <van-col span="4">
           <img class="m1" src="../../../assets/images/icon2.png"/>
         </van-col>
-        <van-col span="12">
+        <van-col span="10">
           <span class="s1" style="font-size: 15px">点币达</span>
           <span class="s2">782人申请</span>
         </van-col>
-        <van-col span="9">
+        <van-col span="10">
           <div class="d1">
             <img class="m2" src="../../../assets/images/meb.png"/>
             <span class="s3">成功率：</span>
@@ -106,160 +106,163 @@
 
 <script>
 export default {
-  data  () {
+  data() {
     return {
       loading: false,
       finished: true,
-      list: [{
-        id: 1,
-        img: require('../../../assets/images/icon4.png'),
-        type: 0
-      }, {
-        id: 2,
-        img: require('../../../assets/images/icon4.png'),
-        type: 1
-      }]
-    }
+      list: [
+        {
+          id: 1,
+          img: require("../../../assets/images/icon4.png"),
+          type: 0
+        },
+        {
+          id: 2,
+          img: require("../../../assets/images/icon4.png"),
+          type: 1
+        }
+      ]
+    };
   }
-}
+};
 </script>
 
-<style>
-  .sk-cell {
-    color: #666666;
-    background: #fff;
-  }
-  .sk-cell .m1 {
-    float: left;
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    margin-bottom: 8px;
-  }
-  .sk-cell .s1{
-    display: block;
-    margin-top: 10px;
-  }
-  .sk-cell .d1{
-    width: 150px;
-    height: 40px;
-    border: 1px solid #EEEEEE;
-    border-radius: 10px;
-    margin-top: 14px;
-  }
-   .sk-cell .m2 {
-     float: left;
-     width: 20px;
-     margin-top: 12px;
-     margin-left: 12px;
-   }
-   .sk-cell .s3 {
-     float: left;
-     color: #858585;
-     font-size: 14px;
-     margin-left: 6px;
-     margin-top: 10px;
-   }
-   .sk-cell .s4{
-     float: left;
-     color: #FF1C1C;
-     font-size: 24px;
-     margin-top: 8px;
-   }
-   .cd-d1 {
-     background: #fff;
-     padding: 10px 15px;
-     line-height: 30px;
-   }
-   .cd-d1 p{
-     margin: 0px;
-     padding: 0px;
-     color: #666666;
-     font-size: 13px;
-   }
-   .cd-d2 {
-     margin-top: 10px;
-     background: #fff;
-     padding-top: 20px;
-     padding-bottom: 20px;
-     padding-left: 15px;
-     padding-right: 15px;
-   }
-   .cd-d2-col {
-     height: 80px;
-   }
-   .cd-d2-col .s1 {
-     display: block;
-     color: #333333;
-     font-size: 15px;
-     margin-top: 5px;
-   }
-   .cd-d2-col .s2{
-     display: block;
-     color: #666666;
-     font-size: 15px;
-     margin-top: 15px;
-   }
-   .cd-d2-col .s3 {
-     display: block;
-     color: red;
-     font-size: 15px;
-     margin-top: 15px;
-   }
-   .cd-d2-col .s4{
-     display: block;
-     color: #333333;
-     font-size: 15px;
-     margin-top: 16px;
-   }
-   .col1 {
-     border-right: 1px solid #EEEEEE;
-     border-bottom: 1px solid #EEEEEE;
-   }
-   .col2 {
-     border-bottom: 1px solid #EEEEEE;
-   }
-   .col3 {
-     border-right: 1px solid #EEEEEE;
-   }
-   .cd-d3 {
-     margin-top: 10px;
-     background: #fff;
-     padding: 15px 15px;
-   }
-   .cd-d3 .s1{
-     font-size: 15px;
-     color: #333333;
-     display: block;
-   }
-   .cd-d4 {
-     padding: 10px 15px;
-     margin-top: 20px;
-     background: #fff;
-     border-bottom: 1px solid #F7F7F7;
-   }
-   .cd-d4 .s1{
-     float: left;
-     color: #333333;
-     font-size: 15px;
-   }
-   .cd-d4 .a1{
-     float: right;
-     color: #666666;
-     font-size: 14px;
-     margin-top: 3px;
-   }
-   .sk-cell {
-    color: #666666;
-    background: #fff;
-  }
-  .sk-cell .m1 {
-    float: left;
-    width: 50px;
-    height: 50px;
-  }
-  .sk-cell .dr{
-    float: left;
-    margin-left: 10px;
-  }
+<style lang="postcss" scoped>
+.sk-cell {
+  color: #666666;
+  background: #fff;
+}
+.sk-cell .m1 {
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+.sk-cell .s1 {
+  display: block;
+  margin-top: 10px;
+}
+.sk-cell .d1 {
+  width: 150px;
+  height: 40px;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+.sk-cell .m2 {
+  float: left;
+  width: 20px;
+  margin-top: 12px;
+  margin-left: 12px;
+}
+.sk-cell .s3 {
+  float: left;
+  color: #858585;
+  font-size: 14px;
+  margin-left: 6px;
+  margin-top: 10px;
+}
+.sk-cell .s4 {
+  float: left;
+  color: #ff1c1c;
+  font-size: 24px;
+  margin-top: 8px;
+}
+.cd-d1 {
+  background: #fff;
+  padding: 10px 15px;
+  line-height: 30px;
+}
+.cd-d1 p {
+  margin: 0px;
+  padding: 0px;
+  color: #666666;
+  font-size: 13px;
+}
+.cd-d2 {
+  margin-top: 10px;
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.cd-d2-col {
+  height: 80px;
+}
+.cd-d2-col .s1 {
+  display: block;
+  color: #333333;
+  font-size: 15px;
+  margin-top: 5px;
+}
+.cd-d2-col .s2 {
+  display: block;
+  color: #666666;
+  font-size: 15px;
+  margin-top: 15px;
+}
+.cd-d2-col .s3 {
+  display: block;
+  color: red;
+  font-size: 15px;
+  margin-top: 15px;
+}
+.cd-d2-col .s4 {
+  display: block;
+  color: #333333;
+  font-size: 15px;
+  margin-top: 16px;
+}
+.col1 {
+  border-right: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+}
+.col2 {
+  border-bottom: 1px solid #eeeeee;
+}
+.col3 {
+  border-right: 1px solid #eeeeee;
+}
+.cd-d3 {
+  margin-top: 10px;
+  background: #fff;
+  padding: 15px 15px;
+}
+.cd-d3 .s1 {
+  font-size: 15px;
+  color: #333333;
+  display: block;
+}
+.cd-d4 {
+  padding: 10px 15px;
+  margin-top: 20px;
+  background: #fff;
+  border-bottom: 1px solid #f7f7f7;
+}
+.cd-d4 .s1 {
+  float: left;
+  color: #333333;
+  font-size: 15px;
+}
+.cd-d4 .a1 {
+  float: right;
+  color: #666666;
+  font-size: 14px;
+  margin-top: 3px;
+}
+.sk-cell {
+  color: #666666;
+  background: #fff;
+}
+.sk-cell .m1 {
+  float: left;
+  width: 50px;
+  height: 50px;
+}
+.sk-cell .dr {
+  float: left;
+  margin-left: 10px;
+}
 </style>

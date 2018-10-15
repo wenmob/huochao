@@ -10,6 +10,7 @@
         v-model="loading"
         :finished="finished"
         @load="onLoad"
+        :immediate-check="true"
         v-else
       >
         <van-cell
@@ -44,59 +45,72 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isHas: true,
       loading: false,
-      finished: true,
-      list: [{
-        id: 1,
-        img: require('../../../assets/images/icon4.png'),
-        type: 0
-      }, {
-        id: 2,
-        img: require('../../../assets/images/icon4.png'),
-        type: 0
-      }, {
-        id: 2,
-        img: require('../../../assets/images/icon4.png'),
-        type: 1
-      }, {
-        id: 2,
-        img: require('../../../assets/images/icon4.png'),
-        type: 0
-      }]
+      finished: false,
+      list: []
+    };
+  },
+  methods: {
+    onLoad() {
+      console.log(this.list);
+      this.list = [
+        {
+          id: 1,
+          img: require("@/assets/images/icon4.png"),
+          type: 0
+        },
+        {
+          id: 2,
+          img: require("@/assets/images/icon4.png"),
+          type: 0
+        },
+        {
+          id: 3,
+          img: require("@/assets/images/icon4.png"),
+          type: 1
+        },
+        {
+          id: 4,
+          img: require("@/assets/images/icon4.png"),
+          type: 0
+        }
+      ];
+      this.loading = false;
+      this.finished = true;
     }
   }
-}
+};
 </script>
 
 <style>
-  .cutList {
-    border: 1px solid #F2F2F2;
-    padding-top: 20px;
-  }
-  .cl-d1 .m1 {
-    display: block;
-    margin-top: 100px;
-  }
-  .cl-d1 .s1{
-    display: block;
-    color: #999999;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-  .sk-cell {
-    color: #666666;
-    background: #fff;
-  }
-  .sk-cell .m1 {
-    float: left;
-    width: 50px;
-    height: 50px;
-  }
-  .sk-cell .dr{
-    float: left;
-    margin-left: 10px;
-  }
+.cutList {
+  border: 1px solid #f2f2f2;
+  padding-top: 20px;
+}
+.cl-d1 .m1 {
+  display: block;
+  margin-top: 100px;
+}
+.cl-d1 .s1 {
+  display: block;
+  color: #999999;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.sk-cell {
+  color: #666666;
+  background: #fff;
+}
+.sk-cell .m1 {
+  float: left;
+  width: 50px;
+  height: 50px;
+}
+.sk-cell .dr {
+  float: left;
+  margin-left: 10px;
+}
 </style>

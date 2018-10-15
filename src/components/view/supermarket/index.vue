@@ -111,32 +111,33 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       loading: false,
       finished: true,
-      list: [{
-        id: 1,
-        img: require('../../../assets/images/icon4.png'),
-        type: 0
-      }, {
-        id: 2,
-        img: require('../../../assets/images/icon4.png'),
-        type: 1
-      }]
-    }
+      list: [
+        {
+          id: 1,
+          img: require("@/assets/images/icon4.png"),
+          type: 0
+        },
+        {
+          id: 2,
+          img: require("@/assets/images/icon4.png"),
+          type: 1
+        }
+      ]
+    };
   },
   methods: {
-    onLoad () {
-
-    }
+    onLoad() {}
   }
-}
+};
 </script>
 
 <style>
 .supermarket {
-  border: 1px solid #F2F2F2;
+  border: 1px solid #f2f2f2;
 }
 .sk-d1 {
   background: #fff;
@@ -166,7 +167,7 @@ export default {
   margin-top: 5px;
   margin-left: 13px;
 }
-.sk-d2-1 .s1{
+.sk-d2-1 .s1 {
   float: left;
   font-size: 15px;
   margin-left: 10px;
@@ -174,14 +175,14 @@ export default {
   font-weight: 600;
   color: #666666;
 }
-.sk-d2-2 .s1{
+.sk-d2-2 .s1 {
   float: left;
   font-size: 15px;
   color: #666666;
   margin-left: 18px;
   margin-top: 10px;
 }
-.sk-d2-2 .s2{
+.sk-d2-2 .s2 {
   float: left;
   font-size: 15px;
   color: #666666;
@@ -196,7 +197,7 @@ export default {
   font-weight: 600;
   color: #999999;
 }
-.sk-d3-head .d1{
+.sk-d3-head .d1 {
   padding: 15px 0px;
 }
 .sk-cell {
@@ -208,7 +209,7 @@ export default {
   width: 50px;
   height: 50px;
 }
-.sk-cell .dr{
+.sk-cell .dr {
   float: left;
   margin-left: 10px;
 }
