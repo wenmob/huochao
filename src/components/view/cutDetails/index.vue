@@ -106,25 +106,25 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       loading: false,
       finished: true,
       list: [
         {
           id: 1,
-          img: require("../../../assets/images/icon4.png"),
+          img: require('../../../assets/images/icon4.png'),
           type: 0
         },
         {
           id: 2,
-          img: require("../../../assets/images/icon4.png"),
+          img: require('../../../assets/images/icon4.png'),
           type: 1
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="postcss" scoped>
