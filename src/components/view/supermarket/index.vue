@@ -160,12 +160,12 @@ export default {
   padding: 10px 13px;
 }
 .sk-h-m {
-  width: 50px;
+  width: 45px;
   display: block;
 }
 .sk-h-s {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   margin-top: 7px;
 }
 .sk-d2-1 {
@@ -174,37 +174,37 @@ export default {
 }
 .sk-d2-1 .m1 {
   float: left;
-  width: 23px;
-  margin-top: 5px;
+  width: 20px;
+  margin-top: 10px;
   margin-left: 13px;
 }
 .sk-d2-1 .s1 {
   float: left;
-  font-size: 15px;
+  font-size: 14px;
   margin-left: 10px;
-  margin-top: 8px;
+  margin-top: 10px;
   font-weight: 600;
   color: #666666;
 }
 .sk-d2-2 .s1 {
   float: left;
-  font-size: 15px;
+  font-size: 14px;
   color: #666666;
-  margin-left: 18px;
+  margin-left: 16px;
   margin-top: 10px;
 }
 .sk-d2-2 .s2 {
   float: left;
-  font-size: 15px;
+  font-size: 14px;
   color: #666666;
   margin-left: 18px;
-  margin-top: 12px;
+  margin-top: 13px;
 }
 .sk-d3 {
   margin-top: 10px;
 }
 .sk-d3-head {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #999999;
 }
@@ -214,6 +214,7 @@ export default {
 .sk-cell {
   color: #666666;
   background: #fff;
+  font-size: 13px;
 }
 .sk-cell .m1 {
   float: left;

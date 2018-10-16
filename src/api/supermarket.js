@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function getAdvertisementListByPosition (params) {
   return request({
-    url: '/APP/GetAdvertisementListByPosition',
+    url: '/api/APP/GetAdvertisementListByPosition',
     method: 'post',
     data: params
   })
