@@ -3,40 +3,16 @@
     <!--8个选项-->
     <div class="sk-d1">
     <van-row type="flex">
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon1.png"/>
-        <span class="sk-h-s">最新口子</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon2.png"/>
-        <span class="sk-h-s">贷款中心</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon3.png"/>
-        <span class="sk-h-s">商务合作</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon4.png"/>
-        <span class="sk-h-s">会员介绍</span>
+      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="nextPager(item1.url)">
+        <img class="sk-h-m" :src="item1.imapath"/>
+        <span class="sk-h-s">{{item1.title}}</span>
       </van-col>
     </van-row>
 
-    <van-row type="flex" style="margin-top: 12px">
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon5.png"/>
-        <span class="sk-h-s">热门推荐</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon6.png"/>
-        <span class="sk-h-s">无须征信</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon7.png"/>
-        <span class="sk-h-s">极速通道</span>
-      </van-col>
-      <van-col span="6" align="center">
-        <img class="sk-h-m" src="../../../assets/images/icon8.png"/>
-        <span class="sk-h-s">购买会员</span>
+    <van-row type="flex" style="margin-top: 12px" v-if="listHead.length > 4">
+      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="nextPager(item2.url)">
+        <img class="sk-h-m" :src="item2.imapath"/>
+        <span class="sk-h-s">{{item2.title}}</span>
       </van-col>
     </van-row>
     </div>
@@ -47,14 +23,20 @@
           <img class="m1" src="../../../assets/images/money.png"/>
           <span class="s1">今日下款</span>
         </van-col>
-        <van-col span="6" class="sk-d2-2">
-          <span class="s1">金斗云贷</span>
-        </van-col>
-        <van-col span="6" class="sk-d2-2">
-          <span class="s1" style="color: red">利率0.03%</span>
-        </van-col>
-        <van-col span="3" class="sk-d2-2">
-          <span class="s2">18:05</span>
+        <van-col span="16">
+          <van-swipe :autoplay="3000" vertical style="width: 100%; height: 40px">
+            <van-swipe-item v-for="(item,index) in listToday" :key="index">
+              <van-col span="8" class="sk-d2-2">
+                <span class="s1">{{item.name}}</span>
+              </van-col>
+              <van-col span="9" class="sk-d2-2">
+                <span class="s1" style="color: red">利率{{item.successrate}}</span>
+              </van-col>
+              <van-col span="3" class="sk-d2-2">
+                <span class="s2">18:05</span>
+              </van-col>
+            </van-swipe-item>
+          </van-swipe>
         </van-col>
       </van-row>
     </div>
@@ -110,12 +92,14 @@
 </template>
 
 <script>
-import { getAdvertisementListByPosition } from '@/api/supermarket'
+import { getAdvertisementListByPosition, getTodayPayProduct } from '@/api/supermarket'
 export default {
   data () {
     return {
       loading: false,
       finished: true,
+      listHead: [],
+      listToday: [],
       list: [
         {
           id: 1,
@@ -130,17 +114,57 @@ export default {
       ]
     }
   },
+  computed: {
+    listHead1 () {
+      let arr = []
+      arr = this.listHead.filter((ele, index) => {
+        if (index <= 3) {
+          return true
+        } else {
+          return false
+        }
+      })
+      return arr
+    },
+    listHead2 () {
+      let arr = []
+      if (this.listHead.length > 4) {
+        arr = this.listHead.filter((ele, index) => {
+          if (index > 3) {
+            return true
+          } else {
+            return false
+          }
+        })
+      }
+      return arr
+    }
+  },
   mounted () {
     this.getAdvertisementList()
+    this.getTodayPayProduct()
   },
   methods: {
     onLoad () {},
+    // 获取头部的广告栏
     getAdvertisementList () {
       getAdvertisementListByPosition({ADPosition: 'H5CSTop'}).then(res => {
-        console.log(res)
+        this.listHead = res
       }).catch(err => {
         this.$toast.fail(err)
       })
+    },
+    // 获取今日下款
+    getTodayPayProduct () {
+      getTodayPayProduct().then(res => {
+        this.listToday = res
+      }).catch(err => {
+        this.$toast.fail(err)
+      })
+    },
+    // 点击头部的选择栏
+    nextPager (url) {
+      alert(url)
     }
   }
 }
@@ -205,7 +229,7 @@ export default {
 }
 .sk-d3-head {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #999999;
 }
 .sk-d3-head .d1 {

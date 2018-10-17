@@ -10,3 +10,13 @@ export function getAdvertisementListByPosition (params) {
     data: params
   })
 }
+/**
+ * 获取今日下款
+ */
+export function getTodayPayProduct (params) {
+  return request({
+    url: '/api/APP/GetTodayPayProduct',
+    method: 'post',
+    data: params
+  })
+}
