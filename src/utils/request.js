@@ -19,6 +19,7 @@ const service = ({url, method, data}) => {
         }
       },
       error: (err) => {
+        Toast.fail(err)
         reject(err)
       }
     })
