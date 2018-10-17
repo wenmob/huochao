@@ -24,8 +24,8 @@
           <span class="s1">今日下款</span>
         </van-col>
         <van-col span="16">
-          <van-swipe :autoplay="3000" vertical style="width: 100%; height: 40px">
-            <van-swipe-item v-for="(item,index) in listToday" :key="index">
+          <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
+            <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="nextOther(item.urladdress)">
               <van-col span="8" class="sk-d2-2">
                 <span class="s1">{{item.name}}</span>
               </van-col>
@@ -43,44 +43,44 @@
     <!--最新口子、推荐口子、热门口子-->
     <div class="sk-d3">
       <van-row type="flex" class="sk-d3-head">
-        <van-col span="8" align="center" class="d1" style="background: #fff">
-          <span>最新口子</span>
-        </van-col>
-        <van-col span="8" class="d1" align="center">
-          <span>推荐口子</span>
-        </van-col>
-        <van-col span="8" class="d1" align="center">
-          <span>热门口子</span>
+        <van-col span="6"
+        align="center"
+        class="d1"
+        :style="catIndex === index ? 'background: #fff' : 'background:  #f2f2f2'"
+        v-for="(item,index) in listObeject"
+        :key="index"
+        @click.native="catProd(index)">
+          <span>{{item.Name}}</span>
         </van-col>
       </van-row>
-      <!--列表展示-->
+      <!--列表展示@load="getCatAndProJsonLit"-->
       <van-list
         v-model="loading"
         :finished="finished"
-        @load="onLoad"
       >
         <van-cell
-          v-for="item in list"
-          :key="item.id"
+          v-for="item in listProd"
+          :key="item.ID"
           class="sk-cell"
+          @click="nextProdPage(item.URLAddress)"
         >
          <van-row type="flex">
            <van-col span="4">
-             <img class="m1" :src="item.img"/>
+             <img class="m1" :src="item.LogoPath"/>
            </van-col>
            <van-col span="20">
              <van-row>
-               <span style="font-szie: 16px">点币达</span>
-               <van-tag type="danger" v-if="item.type == 0">热门口子</van-tag>
+               <span style="font-szie: 16px">{{item.Name}}</span>
+               <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
                <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
              </van-row>
              <van-row type="flex">
-               <van-col span="10"><span>额度：1000-10000</span></van-col>
-               <van-col span="8"><span>成功率：<i style="color: red">97%</i></span></van-col>
-               <van-col span="6"><span>费用<i style="color: red">0.04%</i></span></van-col>
+               <van-col span="10"><span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span></van-col>
+               <van-col span="7"><span>成功率:<i style="color: red">{{item.SuccessRate}}</i></span></van-col>
+               <van-col span="7"><span>{{item.InterestRateType}}<i style="color: red">{{item.InterestRateValue}}</i></span></van-col>
              </van-row>
              <van-row>
-               <span>芝麻分满580，无需要面签，极速</span>
+               <span>{{item.Strategy}}，{{item.ProductTypeName}}，{{item.PaymentmethodName}}</span>
              </van-row>
            </van-col>
          </van-row>
@@ -92,26 +92,17 @@
 </template>
 
 <script>
-import { getAdvertisementListByPosition, getTodayPayProduct } from '@/api/supermarket'
+import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit } from '@/api/supermarket'
 export default {
   data () {
     return {
-      loading: false,
-      finished: true,
-      listHead: [],
-      listToday: [],
-      list: [
-        {
-          id: 1,
-          img: require('@/assets/images/icon4.png'),
-          type: 0
-        },
-        {
-          id: 2,
-          img: require('@/assets/images/icon4.png'),
-          type: 1
-        }
-      ]
+      loading: true,
+      finished: false,
+      listHead: [], // 头部广告list
+      listToday: [], // 今日下款list
+      listObeject: [], // 类别和产品
+      catIndex: 0,
+      listProd: [] // 类别对应的产品
     }
   },
   computed: {
@@ -141,30 +132,77 @@ export default {
     }
   },
   mounted () {
-    this.getAdvertisementList()
-    this.getTodayPayProduct()
+    this.initOnLoad()
   },
   methods: {
-    onLoad () {},
+    // 初始化界面
+    initOnLoad () {
+      let toast1 = this.$toast.loading({
+        duration: 0,
+        mask: true,
+        message: '加载中...'
+      })
+      Promise.all([this.getAdvertisementList(), this.getTodayPayProduct(), this.getCatAndProJsonLit()]).then(res => {
+        console.log(res)
+        toast1.clear()
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     // 获取头部的广告栏
     getAdvertisementList () {
-      getAdvertisementListByPosition({ADPosition: 'H5CSTop'}).then(res => {
-        this.listHead = res
-      }).catch(err => {
-        this.$toast.fail(err)
+      return new Promise((resolve, reject) => {
+        getAdvertisementListByPosition({ADPosition: 'H5CSTop'}).then(res => {
+          this.listHead = res
+          resolve(1)
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     // 获取今日下款
     getTodayPayProduct () {
-      getTodayPayProduct().then(res => {
-        this.listToday = res
-      }).catch(err => {
-        this.$toast.fail(err)
+      return new Promise((resolve, reject) => {
+        getTodayPayProduct().then(res => {
+          this.listToday = res
+          resolve(2)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    // 获取产品类别和产品
+    getCatAndProJsonLit () {
+      return new Promise((resolve, reject) => {
+        getCatAndProJsonLit().then(res => {
+          this.loading = false
+          this.listObeject = res
+          if (this.listObeject.length > 0) {
+            this.listProd = res[0].ProLit
+            this.finished = true
+          }
+          resolve(3)
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     // 点击头部的选择栏
     nextPager (url) {
-      alert(url)
+      window.location.href = url
+    },
+    // 点击今日下款跳转到其他页面
+    nextOther (url) {
+      window.location.href = url
+    },
+    // 点击类别对应的产品列表
+    catProd (n) {
+      this.catIndex = n
+      this.listProd = this.listObeject[n].ProLit
+    },
+    // 点击产品跳转到其他页面
+    nextProdPage (url) {
+      window.location.href = url
     }
   }
 }

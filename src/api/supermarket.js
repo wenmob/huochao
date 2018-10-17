@@ -20,3 +20,13 @@ export function getTodayPayProduct (params) {
     data: params
   })
 }
+/**
+ * 获取产品类别和产品
+ */
+export function getCatAndProJsonLit (params) {
+  return request({
+    url: '/api/APP/GetCatAndProJsonLit',
+    method: 'post',
+    data: params
+  })
+}
