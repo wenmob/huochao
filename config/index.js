@@ -16,7 +16,7 @@ module.exports = {
         changeOrigin: true,  //是否跨域
         pathRewrite: {
             '^/api': ''   //需要rewrite的,
-        }              
+        }
       }
     },
 
@@ -58,7 +58,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, "../dist"),
     assetsSubDirectory: "static",
-    assetsPublicPath: "",
+    assetsPublicPath: "./",
 
     /**
      * Source Maps
