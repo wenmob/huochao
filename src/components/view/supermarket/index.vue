@@ -62,7 +62,7 @@
           v-for="item in listProd"
           :key="item.ID"
           class="sk-cell"
-          @click="nextProdPage(item.URLAddress)"
+          @click.native="nextProdPage(item.ID)"
         >
          <van-row type="flex">
            <van-col span="4">
@@ -80,7 +80,7 @@
                <van-col span="7"><span>{{item.InterestRateType}}<i style="color: red">{{item.InterestRateValue}}</i></span></van-col>
              </van-row>
              <van-row>
-               <span>{{item.Strategy}}，{{item.ProductTypeName}}，{{item.PaymentmethodName}}</span>
+               <span>{{item.Strategy}}</span>
              </van-row>
            </van-col>
          </van-row>
@@ -153,7 +153,8 @@ export default {
     getAdvertisementList () {
       return new Promise((resolve, reject) => {
         getAdvertisementListByPosition({ADPosition: 'H5CSTop'}).then(res => {
-          this.listHead = res
+          const data = res.object
+          this.listHead = data
           resolve(1)
         }).catch(err => {
           reject(err)
@@ -164,7 +165,8 @@ export default {
     getTodayPayProduct () {
       return new Promise((resolve, reject) => {
         getTodayPayProduct().then(res => {
-          this.listToday = res
+          const data = res.object
+          this.listToday = data
           resolve(2)
         }).catch(err => {
           reject(err)
@@ -175,10 +177,11 @@ export default {
     getCatAndProJsonLit () {
       return new Promise((resolve, reject) => {
         getCatAndProJsonLit().then(res => {
+          const data = res.object
           this.loading = false
-          this.listObeject = res
+          this.listObeject = data
           if (this.listObeject.length > 0) {
-            this.listProd = res[0].ProLit
+            this.listProd = data[0].ProLit
             this.finished = true
           }
           resolve(3)
@@ -201,14 +204,15 @@ export default {
       this.listProd = this.listObeject[n].ProLit
     },
     // 点击产品跳转到其他页面
-    nextProdPage (url) {
-      window.location.href = url
+    nextProdPage (id) {
+      this.$router.push({path: '/cutDetails', query: {id: id}})
     }
   }
 }
 </script>
 
 <style>
+@import url('../../../assets/css/common.css');
 .supermarket {
   border: 1px solid #f2f2f2;
 }
@@ -223,6 +227,7 @@ export default {
 }
 .sk-h-m {
   width: 45px;
+  height: 45px;
   display: block;
 }
 .sk-h-s {
@@ -272,19 +277,5 @@ export default {
 }
 .sk-d3-head .d1 {
   padding: 15px 0px;
-}
-.sk-cell {
-  color: #666666;
-  background: #fff;
-  font-size: 13px;
-}
-.sk-cell .m1 {
-  float: left;
-  width: 50px;
-  height: 50px;
-}
-.sk-cell .dr {
-  float: left;
-  margin-left: 10px;
 }
 </style>

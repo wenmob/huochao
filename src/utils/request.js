@@ -12,7 +12,7 @@ const service = ({url, method, data}) => {
       data: data,
       success: (data, status) => {
         if (data.code === 12000) {
-          resolve(data.object)
+          resolve(data)
         } else {
           Toast.fail(data.message)
           reject(data.message)

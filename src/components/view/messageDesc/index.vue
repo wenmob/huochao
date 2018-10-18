@@ -4,16 +4,16 @@
       <!--标题的内容-->
       <div class="md-cont-d1">
         <span class="md-title">
-          新口子，额度独立申请，基本首次下款为1000元
+          {{form.Title}}
         </span>
         <div class="md-cont-d2">
-          <span class="s1">阅读：123213</span>
-          <span class="s2">来自：最新口子</span>
+          <span class="s1">阅读：{{form.ReadNumber}}</span>
+          <span class="s2">来自：{{form.Source}}</span>
           <div style="clear:both"></div>
         </div>
       </div>
       <!--内容-->
-      <div class="md-cont-d3">
+      <div class="md-cont-d3" v-html="form.Content">
         <span class="s1">想要了解更多热门资讯、玩机技巧、数码评测、科普深扒，可以
           点击右上角关注我们的百家号：雷科技
         </span>
@@ -29,10 +29,47 @@
 </template>
 
 <script>
+import { getNewsDetails } from '@/api/messageDesc'
 export default {
   data () {
     return {
-
+      NewsID: '6',
+      form: {
+        Title: '',
+        ReadNumber: '',
+        Source: '',
+        Content: ''
+      }
+    }
+  },
+  mounted () {
+    this.checkNewsID()
+    this.getNewsDetails()
+  },
+  methods: {
+    // 判断是否有NewsID传来
+    checkNewsID () {
+      if (this.$route.query.NewsID) {
+        this.NewsID = this.$route.query.NewsID
+      }
+    },
+    // 获取资讯详情
+    getNewsDetails () {
+      let toast1 = this.$toast.loading({
+        duration: 0,
+        mask: true,
+        message: '加载中...'
+      })
+      return new Promise((resolve, reject) => {
+        getNewsDetails({NewsID: this.NewsID}).then(res => {
+          const data = res.rows
+          this.form = {...data}
+          toast1.clear()
+        }).catch(error => {
+          console.log(error)
+          reject(error)
+        })
+      })
     }
   }
 }

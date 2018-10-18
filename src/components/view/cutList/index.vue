@@ -9,32 +9,32 @@
     <van-list
         v-model="loading"
         :finished="finished"
-        @load="onLoad"
-        :immediate-check="true"
+        @load="getProductInfoListByCategoryMore"
         v-else
       >
         <van-cell
           v-for="item in list"
           :key="item.id"
           class="sk-cell"
+          @click.native="nextProdPage(item.id)"
         >
          <van-row type="flex">
            <van-col span="4">
-             <img class="m1" :src="item.img"/>
+             <img class="m1" :src="item.logopath"/>
            </van-col>
            <van-col span="20">
              <van-row>
-               <span style="font-szie: 16px">点币达</span>
-               <van-tag type="danger" v-if="item.type == 0">热门口子</van-tag>
+               <span style="font-szie: 16px">{{item.name}}</span>
+               <van-tag type="danger" v-if="item.ishot == 1">热门口子</van-tag>
                <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
              </van-row>
              <van-row type="flex">
-               <van-col span="10"><span>额度：1000-10000</span></van-col>
-               <van-col span="8"><span>成功率：<i style="color:red">97%</i></span></van-col>
-               <van-col span="6"><span>费用<i style="color:red">0.04%</i></span></van-col>
+               <van-col span="10"><span>额度:{{item.lowamountrange}}-{{item.highamountrange}}</span></van-col>
+               <van-col span="7"><span>成功率:<i style="color:red">{{item.successrate}}</i></span></van-col>
+               <van-col span="7"><span>{{item.interestratetype}}<i style="color:red">{{item.interestratevalue}}</i></span></van-col>
              </van-row>
              <van-row>
-               <span>芝麻分满580，无需要面签，极速</span>
+               <span>{{item.strategy}}</span>
              </van-row>
            </van-col>
          </van-row>
@@ -44,51 +44,75 @@
 </template>
 
 <script>
+import { getProductInfoListByCategoryMore } from '@/api/cutList'
 export default {
-  data() {
+  data () {
     return {
-      isHas: true,
-      loading: false,
+      form: {
+        ProductCategoryID: '',
+        pageIndex: 0,
+        pageSize: 10
+      },
+      isHas: false,
+      loading: true,
       finished: false,
-      list: []
-    };
+      list: [],
+      toast1: undefined
+    }
+  },
+  mounted () {
+    this.toast1 = this.$toast.loading({
+      duration: 0,
+      mask: true,
+      message: '加载中...'
+    })
+    this.checkCategoryID()
+    this.getProductInfoListByCategoryMore()
   },
   methods: {
-    onLoad() {
-      console.log(this.list);
-      this.list = [
-        {
-          id: 1,
-          img: require("@/assets/images/icon4.png"),
-          type: 0
-        },
-        {
-          id: 2,
-          img: require("@/assets/images/icon4.png"),
-          type: 0
-        },
-        {
-          id: 3,
-          img: require("@/assets/images/icon4.png"),
-          type: 1
-        },
-        {
-          id: 4,
-          img: require("@/assets/images/icon4.png"),
-          type: 0
-        }
-      ];
-      this.loading = false;
-      this.finished = true;
+    // 判断是否有类Id传来
+    checkCategoryID () {
+      if (this.$route.query.ProductCategoryID) {
+        this.form.ProductCategoryID = this.$route.query.ProductCategoryID
+      }
+    },
+    // 获取更多列表的接口
+    getProductInfoListByCategoryMore () {
+      this.form.pageIndex++
+      return new Promise((resolve, reject) => {
+        getProductInfoListByCategoryMore(this.form).then(res => {
+          this.loading = false
+          const data = res.object
+          if (data.length > 0) {
+            this.isHas = true
+          }
+          for (let i = 0; i < data.length; i++) {
+            this.list.push(data[i])
+          }
+          if (data.length < this.form.pageSize) {
+            this.finished = true
+          }
+          this.toast1.clear()
+          resolve(1)
+        }).catch(error => {
+          console.log(error)
+          reject(error)
+        })
+      })
+    },
+    // 点击产品跳转到其他页面
+    nextProdPage (id) {
+      this.$router.push({path: '/cutDetails', query: {id: id}})
     }
   }
-};
+}
 </script>
 
 <style>
+@import url('../../../assets/css/common.css');
 .cutList {
   border: 1px solid #f2f2f2;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 .cl-d1 .m1 {
   display: block;
@@ -99,18 +123,5 @@ export default {
   color: #999999;
   font-size: 16px;
   margin-top: 10px;
-}
-.sk-cell {
-  color: #666666;
-  background: #fff;
-}
-.sk-cell .m1 {
-  float: left;
-  width: 50px;
-  height: 50px;
-}
-.sk-cell .dr {
-  float: left;
-  margin-left: 10px;
 }
 </style>

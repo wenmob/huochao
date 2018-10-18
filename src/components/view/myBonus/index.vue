@@ -10,7 +10,7 @@
       <!--第一部分-->
       <div class="myBonus-cont-d1">
         <span class="s1">可用</span>
-        <span class="s2">1889分</span>
+        <span class="s2">{{BalanceAmount}}分</span>
         <div style="clear: both"></div>
       </div>
       <!--第二部分-->
@@ -32,21 +32,20 @@
         <van-list
           v-model="loading"
           :finished="finished"
-          @load="onLoad"
         >
-          <van-row type="flex" class="mb-row" v-for="item in list" :key="item.id">
+          <van-row type="flex" class="mb-row" v-for="item in list" :key="item.ID">
             <van-col span="9" class="mb-col">
-              <span class="s2">2017-11-11 18:23:11</span>
+              <span class="s2">{{item.CreateDate}}</span>
             </van-col>
             <van-col span="5" class="mb-col">
-              <span class="s2">{{item.typeName}}</span>
+              <span class="s2">{{item.Type}}</span>
             </van-col>
             <van-col span="5" class="mb-col">
-              <span class="s2" style="color: #7ED321" v-if="item.val >= 0">+{{item.val}}</span>
-              <span class="s2" style="color: #F5A623" v-else>{{item.val}}</span>
+              <span class="s2" style="color: #7ED321" v-if="item.Balance >= 0">+{{item.Balance}}</span>
+              <span class="s2" style="color: #F5A623" v-else>{{item.Balance}}</span>
             </van-col>
             <van-col span="5" class="mb-col">
-              <span class="s2">500分</span>
+              <span class="s2">{{item.IntegralValue}}分</span>
             </van-col>
           </van-row>
         </van-list>
@@ -56,20 +55,46 @@
 </template>
 
 <script>
+import { getUserIntegral } from '@/api/myBonus'
 export default {
   data  () {
     return {
-      isHas: true,
+      UserKey: 'c61d197542354f7b80154a53e6ba1298',
+      BalanceAmount: '',
+      isHas: false,
       loading: false,
       finished: true,
-      list: [{id: 1, val: 100.00, typeName: '奖励'},
-        {id: 2, val: -1000.00, typeName: '折扣'},
-        {id: 3, val: 1212.00, typeName: '分享'}]
+      list: []
     }
   },
+  mounted () {
+    this.checkToken()
+    this.getUserIntegral()
+  },
   methods: {
-    onLoad  () {
-
+    // 判断是否有token传来
+    checkToken () {
+      if (this.$route.query.token) {
+        this.UserKey = this.$route.query.token
+      }
+    },
+    // 获取我的积分
+    getUserIntegral () {
+      let toast1 = this.$toast.loading({
+        duration: 0,
+        mask: true,
+        message: '加载中...'
+      })
+      getUserIntegral({UserKey: this.UserKey}).then(res => {
+        this.BalanceAmount = res.BalanceAmount
+        this.list = res.object
+        if (this.list.length > 0) {
+          this.isHas = true
+        }
+        toast1.clear()
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
@@ -104,7 +129,7 @@ export default {
     float: left;
     display: inline-block;
     color: #333333;
-    font-size: 20px;
+    font-size: 19px;
     margin-left: 16px;
     margin-top: 15px;
   }
@@ -120,10 +145,10 @@ export default {
   }
   .mb-col .s1 {
     color: #666666;
-    font-size: 15px;
+    font-size: 11px;
   }
   .mb-col .s2 {
     color: #666666;
-    font-size: 14px;
+    font-size: 11px;
   }
 </style>

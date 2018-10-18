@@ -1,39 +1,39 @@
 <template>
   <div class="cutDetails">
-    <van-cell class="sk-cell">
+    <van-cell class="cut-cell">
       <van-row>
         <van-col span="4">
-          <img class="m1" src="../../../assets/images/icon2.png"/>
+          <img class="m1" :src="details.LogoPath"/>
         </van-col>
         <van-col span="10">
-          <span class="s1" style="font-size: 15px">点币达</span>
-          <span class="s2">782人申请</span>
+          <span class="s1" style="font-size: 15px">{{details.Name}}</span>
+          <span class="s2">{{details.ApplyCount}}人申请</span>
         </van-col>
-        <van-col span="10">
+        <van-col span="9">
           <div class="d1">
             <img class="m2" src="../../../assets/images/meb.png"/>
             <span class="s3">成功率：</span>
-            <span class="s4">97%</span>
+            <span class="s4">{{details.SuccessRate}}</span>
           </div>
         </van-col>
       </van-row>
     </van-cell>
     <!--简介-->
     <div class="cd-d1">
-      <p>芝麻分满580，无需要面签.极速</p>
-      <p>征信要求：无</p>
-      <p>平台名称：点币达信贷有限公司</p>
+      <p>{{markString1}}</p>
+      <p>征信要求：{{details.RequestForCredit === '' ? '无' : details.RequestForCredit}}</p>
+      <!-- <p>申请攻略：{{details.ProductIntroduction}}</p> -->
     </div>
     <!--额度、期限、费用-->
     <div class="cd-d2">
       <van-row type="flex">
         <van-col span="8" class="cd-d2-col col1" align="center">
           <span class="s1">额度</span>
-          <span class="s2">1000-10000</span>
+          <span class="s2">{{details.LowAmountRange}}-{{details.HighAmountRange}}</span>
         </van-col>
         <van-col span="8" class="cd-d2-col col1" align="center">
           <span class="s1">期限</span>
-          <span class="s2">7-14天</span>
+          <span class="s2">{{details.LoanTerm}}</span>
         </van-col>
         <van-col span="8" class="cd-d2-col col2" align="center">
           <span class="s1">费用</span>
@@ -43,59 +43,58 @@
       <van-row type="flex">
         <van-col span="8" class="cd-d2-col col3" align="center">
           <span class="s4">放款速度</span>
-          <span class="s2">2小时</span>
+          <span class="s2">{{details.LoanSpeed}}</span>
         </van-col>
         <van-col span="8" class="cd-d2-col col3" align="center">
           <span class="s4">审核方式</span>
-          <span class="s2">自动审核</span>
+          <span class="s2">{{details.AuditMethod}}</span>
         </van-col>
         <van-col span="8" class="cd-d2-col" align="center">
           <span class="s4">到账方式</span>
-          <span class="s3">银行卡</span>
+          <span class="s3">{{details.PaymentMethod}}</span>
         </van-col>
       </van-row>
     </div>
     <!--申请攻略-->
     <div class="cd-d3">
-      <span class="s1">申请攻略</span>
-      <div style="height: 120px" align="center">
-        <span style="line-height: 120px; color: #666666">图文介绍</span>
+      <span class="s1">产品介绍</span>
+      <div style="height: 120px" v-html="details.ProductIntroduction">
       </div>
     </div>
     <!--同类产品、更多-->
     <div class="cd-d4">
       <span class="s1">同类产品</span>
-      <a class="a1">更多</a>
+      <a class="a1" @click="nextMore">更多</a>
       <div style="clear:both"></div>
     </div>
      <!--列表展示-->
       <van-list
         v-model="loading"
         :finished="finished"
-        @load="onLoad"
       >
         <van-cell
-          v-for="item in list"
-          :key="item.id"
+          v-for="item in likeProd"
+          :key="item.ID"
           class="sk-cell"
+          @click.native="nextProdPage(item.ID)"
         >
          <van-row type="flex">
            <van-col span="4">
-             <img class="m1" :src="item.img"/>
+             <img class="m1" :src="item.LogoPath"/>
            </van-col>
            <van-col span="20">
              <van-row>
-               <span style="font-szie: 16px">点币达</span>
-               <van-tag type="danger" v-if="item.type == 0">热门口子</van-tag>
+               <span style="font-szie: 16px">{{item.Name}}</span>
+               <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
                <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
              </van-row>
              <van-row type="flex">
-               <van-col span="10"><span>额度：1000-10000</span></van-col>
-               <van-col span="8"><span>成功率：<i style="color: red">97%</i></span></van-col>
-               <van-col span="6"><span>费用<i style="color: red">0.04%</i></span></van-col>
+               <van-col span="10"><span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span></van-col>
+               <van-col span="7"><span>成功率:<i style="color: red">{{item.SuccessRate}}</i></span></van-col>
+               <van-col span="7"><span>{{item.InterestRateType}}<i style="color: red">{{item.InterestRateValue}}</i></span></van-col>
              </van-row>
              <van-row>
-               <span>芝麻分满580，无需要面签，极速</span>
+               <span>{{item.Strategy}}</span>
              </van-row>
            </van-col>
          </van-row>
@@ -105,68 +104,177 @@
 </template>
 
 <script>
+import { getProductInfoDetails, getProductInfoListByCategory } from '@/api/cutDetails'
 export default {
   data () {
     return {
+      ProductID: '',
+      details: {
+        LogoPath: '',
+        Name: '-',
+        ApplyCount: '-',
+        SuccessRate: '-',
+        Strategy: '',
+        ProductTypeName: '',
+        PaymentmethodName: '',
+        RequestForCredit: '',
+        ProductIntroduction: '',
+        LowAmountRange: '',
+        HighAmountRange: '',
+        PaymentMethod: '',
+        AuditMethod: '',
+        LoanSpeed: '',
+        LoanTerm: '',
+        CategoryID: ''
+      },
       loading: false,
       finished: true,
-      list: [
-        {
-          id: 1,
-          img: require('../../../assets/images/icon4.png'),
-          type: 0
-        },
-        {
-          id: 2,
-          img: require('../../../assets/images/icon4.png'),
-          type: 1
-        }
-      ]
+      likeProd: []
+    }
+  },
+  inject: ['reload'],
+  computed: {
+    markString1 () {
+      let str = ''
+      if (this.details.Strategy) {
+        str = str + this.details.Strategy
+      }
+      // if (this.details.ProductTypeName) {
+      //   if (str) {
+      //     str = str + '，' + this.details.ProductTypeName
+      //   } else {
+      //     str = str + this.details.ProductTypeName
+      //   }
+      // }
+      // if (this.details.PaymentmethodName) {
+      //   if (str) {
+      //     str = str + '，' + this.details.PaymentmethodName
+      //   } else {
+      //     str = str + this.details.PaymentmethodName
+      //   }
+      // }
+      return str
+    }
+  },
+  mounted () {
+    this.initPage()
+  },
+  methods: {
+    // 判断是否有id传来
+    checkProductId () {
+      if (this.$route.query.id) {
+        this.ProductID = this.$route.query.id
+      }
+    },
+    // 初始化界面
+    initPage () {
+      this.checkProductId()
+      let toast1 = this.$toast.loading({
+        duration: 0,
+        mask: true,
+        message: '加载中...'
+      })
+      this.getProductInfoDetails().then(res => {
+        this.getProductInfoListByCategory(res).then(r => {
+          toast1.clear()
+        }).catch(error => {
+          console.log(error)
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    // 获取产品详情的页面
+    getProductInfoDetails () {
+      return new Promise((resolve, reject) => {
+        getProductInfoDetails({ProductID: this.ProductID}).then(res => {
+          const data = res.rows
+          if (data.RequestForCredit === '&nbsp;' || data.RequestForCredit === null) {
+            data.RequestForCredit = ''
+          }
+          // data.ProductIntroduction = data.ProductIntroduction.replace(/<[^>]+>/g, '') // 去掉所有的html标记
+          this.details = {...data}
+          resolve(data.CategoryID)
+        }).catch(error => {
+          reject(error)
+          console.log(error)
+        })
+      })
+    },
+    // 获取同类产品
+    getProductInfoListByCategory (CategoryID) {
+      return new Promise((resolve, reject) => {
+        getProductInfoListByCategory({ProductCategoryID: CategoryID}).then(res => {
+          const data = res.object
+          this.likeProd = data
+          resolve(2)
+        }).catch(error => {
+          reject(error)
+          console.log(error)
+        })
+      })
+    },
+    // 点击产品跳转到其他页面
+    nextProdPage (id) {
+      this.$route.query.id = id
+      this.reload()
+      // this.$router.push({path: '/cutDetails', query: {id: id}})
+    },
+    // 点击更多
+    nextMore () {
+      this.$router.push({path: '/cutList', query: {ProductCategoryID: this.details.CategoryID}})
     }
   }
 }
 </script>
 
-<style lang="postcss" scoped>
-.sk-cell {
+<style>
+@import url('../../../assets/css/common.css');
+.cut-cell {
   color: #666666;
   background: #fff;
 }
-.sk-cell .m1 {
+.cut-cell .m1 {
   float: left;
   width: 50px;
   height: 50px;
   margin-top: 10px;
   margin-bottom: 8px;
 }
-.sk-cell .s1 {
+.cut-cell .s1 {
   display: block;
   margin-top: 10px;
 }
-.sk-cell .d1 {
-  width: 150px;
+.cut-cell .s2 {
+  display: block;
+  font-size: 13px;
+  color: #666666;
+  margin-top: 0px;
+}
+.cut-cell .d1 {
+  width: 142px;
   height: 40px;
   border: 1px solid #eeeeee;
   border-radius: 10px;
   margin-top: 14px;
 }
-.sk-cell .m2 {
+.cut-cell .m2 {
   float: left;
-  width: 20px;
-  margin-top: 12px;
+  width: 18px;
+  margin-top: 13px;
   margin-left: 12px;
 }
-.sk-cell .s3 {
+.cut-cell .s3 {
   float: left;
   color: #858585;
-  font-size: 14px;
+  font-size: 13px;
   margin-left: 6px;
   margin-top: 10px;
 }
-.sk-cell .s4 {
+.cut-cell .s4 {
   float: left;
   color: #ff1c1c;
-  font-size: 24px;
+  font-size: 20px;
   margin-top: 8px;
 }
 .cd-d1 {
@@ -194,25 +302,25 @@ export default {
 .cd-d2-col .s1 {
   display: block;
   color: #333333;
-  font-size: 15px;
+  font-size: 14px;
   margin-top: 5px;
 }
 .cd-d2-col .s2 {
   display: block;
   color: #666666;
-  font-size: 15px;
+  font-size: 14px;
   margin-top: 15px;
 }
 .cd-d2-col .s3 {
   display: block;
   color: red;
-  font-size: 15px;
+  font-size: 14px;
   margin-top: 15px;
 }
 .cd-d2-col .s4 {
   display: block;
   color: #333333;
-  font-size: 15px;
+  font-size: 14px;
   margin-top: 16px;
 }
 .col1 {
@@ -231,26 +339,26 @@ export default {
   padding: 15px 15px;
 }
 .cd-d3 .s1 {
-  font-size: 15px;
+  font-size: 14px;
   color: #333333;
   display: block;
 }
 .cd-d4 {
   padding: 10px 15px;
-  margin-top: 20px;
+  margin-top: 10px;
   background: #fff;
   border-bottom: 1px solid #f7f7f7;
 }
 .cd-d4 .s1 {
   float: left;
   color: #333333;
-  font-size: 15px;
+  font-size: 14px;
 }
 .cd-d4 .a1 {
   float: right;
   color: #666666;
   font-size: 14px;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 .sk-cell {
   color: #666666;

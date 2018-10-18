@@ -10,8 +10,8 @@
       <!--第一部分-->
       <div class="myBonus-cont-d1">
         <span class="s1">可用</span>
-        <span class="s2">1889.00</span>
-        <span class="s3">冻结：1889.00</span>
+        <span class="s2">{{BalanceAmount}}</span>
+        <span class="s3">冻结：{{FrozenAmount}}</span>
         <div style="clear: both"></div>
       </div>
       <!--第二部分-->
@@ -33,21 +33,20 @@
         <van-list
           v-model="loading"
           :finished="finished"
-          @load="onLoad"
         >
-          <van-row type="flex" class="mb-row" v-for="item in list" :key="item.id">
+          <van-row type="flex" class="mb-row" v-for="item in list" :key="item.ID">
             <van-col span="9" class="mb-col">
-              <span class="s2">2017-11-11 18:23:11</span>
+              <span class="s2">{{item.CreateDate}}</span>
             </van-col>
             <van-col span="5" class="mb-col" align="center">
-              <span class="s2">{{item.typeName}}</span>
+              <span class="s2">{{item.RechargeType}}</span>
             </van-col>
             <van-col span="5" class="mb-col" align="center">
-              <span class="s2" style="color: #7ED321" v-if="item.val >= 0">+{{item.val.toFixed(2)}}</span>
-              <span class="s2" style="color: #F5A623" v-else>{{item.val.toFixed(2)}}</span>
+              <span class="s2" style="color: #7ED321" v-if="item.Balance >= 0">+{{item.Amount}}</span>
+              <span class="s2" style="color: #F5A623" v-else>{{item.Balance}}</span>
             </van-col>
             <van-col span="5" class="mb-col" align="center">
-              <span class="s2">500.00</span>
+              <span class="s2">{{item.Amount}}</span>
             </van-col>
           </van-row>
         </van-list>
@@ -57,20 +56,52 @@
 </template>
 
 <script>
+import { getUserWallet } from '@/api/myWallet'
 export default {
   data  () {
     return {
-      isHas: true,
+      BalanceAmount: '',
+      FrozenAmount: '',
+      UserKey: 'c61d197542354f7b80154a53e6ba1298',
+      isHas: false,
       loading: false,
       finished: true,
-      list: [{id: 1, val: 100.00, typeName: '充值'},
-        {id: 2, val: -1000.00, typeName: '充值'},
-        {id: 3, val: 1212.00, typeName: '充值'}]
+      list: []
     }
   },
+  mounted () {
+    this.checkToken()
+    this.getUserWallet()
+  },
   methods: {
-    onLoad  () {
-
+    // 判断是否有token传来
+    checkToken () {
+      if (this.$route.query.token) {
+        this.UserKey = this.$route.query.token
+      }
+    },
+    // 获取我的钱包
+    getUserWallet () {
+      let toast1 = this.$toast.loading({
+        duration: 0,
+        mask: true,
+        message: '加载中...'
+      })
+      getUserWallet({UserKey: this.UserKey}).then(res => {
+        this.BalanceAmount = res.BalanceAmount ? res.BalanceAmount.toFixed(2) : 0
+        this.FrozenAmount = res.FrozenAmount ? res.FrozenAmount.toFixed(2) : 0
+        res.object.forEach(ele => {
+          ele.Amount = ele.Amount ? ele.Amount.toFixed(2) : 0
+          ele.Balance = ele.Balance ? ele.Balance.toFixed(2) : 0
+        })
+        this.list = res.object
+        if (this.list.length > 0) {
+          this.isHas = true
+        }
+        toast1.clear()
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
@@ -86,7 +117,7 @@ export default {
   .cl-d1 .s1{
     display: block;
     color: #999999;
-    font-size: 16px;
+    font-size: 15px;
     margin-top: 10px;
   }
   .myBonus-cont-d1 {
@@ -105,9 +136,9 @@ export default {
     float: left;
     display: inline-block;
     color: #333333;
-    font-size: 20px;
+    font-size: 19px;
     margin-left: 16px;
-    margin-top: 15px;
+    margin-top: 19px;
   }
   .myBonus-cont-d1 .s3{
     float: right;
@@ -129,10 +160,10 @@ export default {
   }
   .mb-col .s1 {
     color: #666666;
-    font-size: 15px;
+    font-size: 11px;
   }
   .mb-col .s2 {
     color: #666666;
-    font-size: 14px;
+    font-size: 11px;
   }
 </style>
