@@ -72,8 +72,8 @@ export default {
   methods: {
     // 判断是否有类Id传来
     checkCategoryID () {
-      if (this.$route.query.ProductCategoryID) {
-        this.form.ProductCategoryID = this.$route.query.ProductCategoryID
+      if (this.$route.query.keyvalue) {
+        this.form.ProductCategoryID = this.$route.query.keyvalue
       }
     },
     // 获取更多列表的接口
@@ -102,7 +102,7 @@ export default {
     },
     // 点击产品跳转到其他页面
     nextProdPage (id) {
-      this.$router.push({path: '/cutDetails', query: {id: id}})
+      this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
     }
   }
 }

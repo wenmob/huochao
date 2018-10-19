@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getNewsDetails } from '@/api/messageDesc'
+import { getNewsDetails, saveNewsAccessRecord } from '@/api/messageDesc'
 export default {
   data () {
     return {
@@ -45,6 +45,7 @@ export default {
   mounted () {
     this.checkNewsID()
     this.getNewsDetails()
+    this.saveNewsAccessRecord()
   },
   methods: {
     // 判断是否有NewsID传来
@@ -68,6 +69,18 @@ export default {
         }).catch(error => {
           console.log(error)
           reject(error)
+        })
+      })
+    },
+    // 调用访问记录
+    saveNewsAccessRecord () {
+      return new Promise((resolve, reject) => {
+        saveNewsAccessRecord({NewsID: this.NewsID}).then(res => {
+          console.log(res)
+          resolve(4)
+        }).catch(error => {
+          reject(error)
+          console.log(error)
         })
       })
     }

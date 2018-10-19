@@ -1,20 +1,21 @@
 import $ from 'jquery'
 import { Toast } from 'vant'
 // import { getToken } from '@/utils/auth'
-// create an axios instance
+// create an axios instance process.env.BASE_API
+const baseUrl = ''
 const service = ({url, method, data}) => {
   return new Promise((resolve, reject) => {
     const timestamp = (new Date()).valueOf()
     $.ajax({
       type: method,
       headers: { 'timestamp': timestamp, 'notsignature': 'b5654518a61c47e4b7cec263a2deba1c' },
-      url: url,
+      url: baseUrl + url,
       data: data,
       success: (data, status) => {
         if (data.code === 12000) {
           resolve(data)
         } else {
-          Toast.fail(data.message)
+          // Toast.fail(data.message)
           reject(data.message)
         }
       },

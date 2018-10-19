@@ -21,3 +21,14 @@ export function getNewsList (params) {
     data: params
   })
 }
+
+/**
+ * 获取资讯列表 GetNewsList
+ */
+export function saveNewsAccessRecord (params) {
+  return request({
+    url: '/api/APP/SaveNewsAccessRecord',
+    method: 'post',
+    data: params
+  })
+}

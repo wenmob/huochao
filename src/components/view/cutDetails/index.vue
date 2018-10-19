@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { getProductInfoDetails, getProductInfoListByCategory } from '@/api/cutDetails'
+import { getProductInfoDetails, getProductInfoListByCategory, saveProductAccessRecord } from '@/api/cutDetails'
 export default {
   data () {
     return {
@@ -162,12 +162,13 @@ export default {
   },
   mounted () {
     this.initPage()
+    this.saveProductAccessRecord()
   },
   methods: {
     // 判断是否有id传来
     checkProductId () {
-      if (this.$route.query.id) {
-        this.ProductID = this.$route.query.id
+      if (this.$route.query.keyvalue) {
+        this.ProductID = this.$route.query.keyvalue
       }
     },
     // 初始化界面
@@ -212,6 +213,18 @@ export default {
           const data = res.object
           this.likeProd = data
           resolve(2)
+        }).catch(error => {
+          reject(error)
+          console.log(error)
+        })
+      })
+    },
+    // 调用访问记录
+    saveProductAccessRecord () {
+      return new Promise((resolve, reject) => {
+        saveProductAccessRecord({ProductID: this.ProductID}).then(res => {
+          console.log(res)
+          resolve(4)
         }).catch(error => {
           reject(error)
           console.log(error)
