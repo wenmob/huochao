@@ -21,3 +21,14 @@ export function getProductInfoListByCategory (params) {
     data: params
   })
 }
+
+/**
+ * 记录访问记录
+ */
+export function saveProductAccessRecord (params) {
+  return request({
+    url: '/api/APP/SaveProductAccessRecord',
+    method: 'post',
+    data: params
+  })
+}
