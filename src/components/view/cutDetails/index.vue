@@ -233,13 +233,13 @@ export default {
     },
     // 点击产品跳转到其他页面
     nextProdPage (id) {
-      this.$route.query.id = id
+      this.$route.query.keyvalue = id
       this.reload()
       // this.$router.push({path: '/cutDetails', query: {id: id}})
     },
     // 点击更多
     nextMore () {
-      this.$router.push({path: '/cutList', query: {ProductCategoryID: this.details.CategoryID}})
+      this.$router.push({path: '/cutList', query: {keyvalue: this.details.CategoryID}})
     },
     // 跳转到申请页面
     registProd (url) {

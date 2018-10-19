@@ -1,7 +1,7 @@
-import axios from "axios";
-import { Toast } from "vant";
-import { getToken } from "@/utils/auth";
-import queryString from "querystring";
+import axios from 'axios'
+import { Toast } from 'vant'
+import { getToken } from '@/utils/auth'
+import queryString from 'querystring'
 // create an axios instance
 
 const service = axios.create({
@@ -10,41 +10,41 @@ const service = axios.create({
   timeout: 1000 * 10,
   // withCredentials:true
   headers: {
-    "content-type": "application/x-www-form-urlencoded"
+    'content-type': 'application/x-www-form-urlencoded'
   }
-});
+})
 
 // request interceptor
 service.interceptors.request.use(
   config => {
     // console.log(config);
-    let data = config.data || {};
+    let data = config.data || {}
     // NProgress.start();
     // Do something before request is sent
     config.headers = {
       // "content-type": "from-data",
       ...config.headers,
       timestamp: new Date() - 0,
-      notsignature: "b5654518a61c47e4b7cec263a2deba1c"
-    };
+      notsignature: 'b5654518a61c47e4b7cec263a2deba1c'
+    }
     // console.log(config);
     if (!config.noToken) {
-      const token = getToken();
+      const token = getToken()
       // console.log("token", token);
-      data.UserKey = token;
+      data.UserKey = token
     }
 
-    config.data = queryString.stringify(data);
+    config.data = queryString.stringify(data)
     // console.log("异步请求:", config);
-    return config;
+    return config
   },
   error => {
     // NProgress.done();
     // Do something with request error
-    console.log(error); // for debug
-    Promise.reject(error);
+    console.log(error) // for debug
+    Promise.reject(error)
   }
-);
+)
 
 // respone interceptor
 service.interceptors.response.use(
@@ -52,22 +52,22 @@ service.interceptors.response.use(
     // NProgress.done();
 
     if (data.code !== 12000) {
-      Toast.fail(data.message);
-      return Promise.reject(data);
+      // Toast.fail(data.message)
+      return Promise.reject(data)
     }
 
-    return data;
+    return data
   },
   (error, b, c) => {
-    console.log(error);
+    console.log(error)
     // console.log("err" + error); // for debug
     // NProgress.done();
-    Toast.fail(error.message);
-    return Promise.reject(error);
+    Toast.fail(error.message)
+    return Promise.reject(error)
   }
-);
+)
 
-export default service;
+export default service
 
 // const service = ({ url, method, data }) => {
 //   return new Promise((resolve, reject) => {
