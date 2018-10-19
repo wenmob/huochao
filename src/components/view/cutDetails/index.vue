@@ -100,6 +100,9 @@
          </van-row>
         </van-cell>
       </van-list>
+      <div class="footer" align="center">
+        <van-button type="danger" style="width: 100%; font-size: 16px;" @click="registProd(details.URLAddress)">立即申请</van-button>
+      </div>
   </div>
 </template>
 
@@ -125,7 +128,8 @@ export default {
         AuditMethod: '',
         LoanSpeed: '',
         LoanTerm: '',
-        CategoryID: ''
+        CategoryID: '',
+        URLAddress: ''
       },
       loading: false,
       finished: true,
@@ -223,6 +227,10 @@ export default {
     // 点击更多
     nextMore () {
       this.$router.push({path: '/cutList', query: {ProductCategoryID: this.details.CategoryID}})
+    },
+    // 跳转到申请页面
+    registProd (url) {
+      window.location.href = url
     }
   }
 }
@@ -230,6 +238,20 @@ export default {
 
 <style>
 @import url('../../../assets/css/common.css');
+.cutDetails {
+  position: relative;
+  padding-bottom: 64px;
+}
+.cutDetails .footer{
+  position: fixed;
+  width: calc(100% - 30px);
+  height: 54px;
+  bottom: 0px;
+  left: 0px;
+  padding: 10px 15px 0px 15px;
+  background-color: rgba(255,255,255, .9);
+  z-index: 2000;
+}
 .cut-cell {
   color: #666666;
   background: #fff;

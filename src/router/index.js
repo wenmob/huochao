@@ -40,6 +40,12 @@ export default new Router({
       name: 'myWallet',
       component: () => import('@/components/view/myWallet'),
       meta: { title: '我的钱包' }
+    },
+    {
+      path: '/siteMessage',
+      name: 'siteMessage',
+      component: () => import('@/components/view/siteMessage'),
+      meta: { title: '站内信息' }
     }
   ]
 })

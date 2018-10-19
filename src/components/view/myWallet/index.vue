@@ -42,11 +42,11 @@
               <span class="s2">{{item.RechargeType}}</span>
             </van-col>
             <van-col span="5" class="mb-col" align="center">
-              <span class="s2" style="color: #7ED321" v-if="item.Balance >= 0">+{{item.Amount}}</span>
-              <span class="s2" style="color: #F5A623" v-else>{{item.Balance}}</span>
+              <span class="s2" style="color: #7ED321" v-if="item.Amount > 0">+{{item.Amount}}</span>
+              <span class="s2" style="color: #F5A623" v-else>{{item.Amount}}</span>
             </van-col>
             <van-col span="5" class="mb-col" align="center">
-              <span class="s2">{{item.Amount}}</span>
+              <span class="s2">{{item.Balance}}</span>
             </van-col>
           </van-row>
         </van-list>

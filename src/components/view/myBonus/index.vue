@@ -41,11 +41,11 @@
               <span class="s2">{{item.Type}}</span>
             </van-col>
             <van-col span="5" class="mb-col">
-              <span class="s2" style="color: #7ED321" v-if="item.Balance >= 0">+{{item.Balance}}</span>
-              <span class="s2" style="color: #F5A623" v-else>{{item.Balance}}</span>
+              <span class="s2" style="color: #7ED321" v-if="item.IntegralValue > 0">+{{item.Balance}}</span>
+              <span class="s2" style="color: #F5A623" v-else>{{item.IntegralValue}}</span>
             </van-col>
             <van-col span="5" class="mb-col">
-              <span class="s2">{{item.IntegralValue}}分</span>
+              <span class="s2">{{item.Balance}}分</span>
             </van-col>
           </van-row>
         </van-list>

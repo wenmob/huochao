@@ -26,15 +26,15 @@
         <van-col span="16">
           <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
             <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="nextOther(item.urladdress)">
-              <van-col span="8" class="sk-d2-2">
+              <van-col span="16" class="sk-d2-2">
                 <span class="s1">{{item.name}}</span>
               </van-col>
-              <van-col span="9" class="sk-d2-2">
-                <span class="s1" style="color: red">利率{{item.successrate}}</span>
+              <van-col span="8" class="sk-d2-2">
+                <span class="s1" style="color: red">成功率{{item.successrate}}</span>
               </van-col>
-              <van-col span="3" class="sk-d2-2">
+              <!-- <van-col span="3" class="sk-d2-2">
                 <span class="s2">18:05</span>
-              </van-col>
+              </van-col> -->
             </van-swipe-item>
           </van-swipe>
         </van-col>

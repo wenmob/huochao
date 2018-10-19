@@ -7,20 +7,13 @@
           {{form.Title}}
         </span>
         <div class="md-cont-d2">
-          <span class="s1">阅读：{{form.ReadNumber}}</span>
-          <span class="s2">来自：{{form.Source}}</span>
+          <!-- <span class="s1">阅读：{{form.ReadNumber}}</span> -->
+          <span class="s2">{{form.CreateDate}}</span>
           <div style="clear:both"></div>
         </div>
       </div>
       <!--内容-->
-      <div class="md-cont-d3" v-html="form.Content">
-        <span class="s1">想要了解更多热门资讯、玩机技巧、数码评测、科普深扒，可以
-          点击右上角关注我们的百家号：雷科技
-        </span>
-        <div class="d1">
-          <img width="100%" src="../../../assets/images/news1.jpg" />
-          <img width="100%" src="../../../assets/images/news2.jpg" />
-        </div>
+      <div class="md-cont-d3" v-html="form.MessageContent">
 
       </div>
     </div>
@@ -29,16 +22,15 @@
 </template>
 
 <script>
-import { getNewsDetails } from '@/api/messageDesc'
+import { getPushMsgDetails } from '@/api/siteMessage'
 export default {
   data () {
     return {
-      NewsID: '6',
+      PushMsgID: '5',
       form: {
         Title: '',
-        ReadNumber: '',
-        Source: '',
-        Content: ''
+        CreateDate: '',
+        MessageContent: ''
       }
     }
   },
@@ -50,10 +42,10 @@ export default {
     // 判断是否有NewsID传来
     checkNewsID () {
       if (this.$route.query.keyvalue) {
-        this.NewsID = this.$route.query.keyvalue
+        this.PushMsgID = this.$route.query.keyvalue
       }
     },
-    // 获取资讯详情
+    // 获取站内信息
     getNewsDetails () {
       let toast1 = this.$toast.loading({
         duration: 0,
@@ -61,7 +53,7 @@ export default {
         message: '加载中...'
       })
       return new Promise((resolve, reject) => {
-        getNewsDetails({NewsID: this.NewsID}).then(res => {
+        getPushMsgDetails({PushMsgID: this.PushMsgID}).then(res => {
           const data = res.rows
           this.form = {...data}
           toast1.clear()
