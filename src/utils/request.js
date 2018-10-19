@@ -10,15 +10,15 @@ const service = axios.create({
   timeout: 1000 * 10,
   // withCredentials:true
   headers: {
-    "content-type": "multipart/form-data"
+    "content-type": "application/x-www-form-urlencoded"
   }
 });
 
 // request interceptor
 service.interceptors.request.use(
   config => {
-    let data = config.data;
-
+    // console.log(config);
+    let data = config.data || {};
     // NProgress.start();
     // Do something before request is sent
     config.headers = {
@@ -30,12 +30,12 @@ service.interceptors.request.use(
     // console.log(config);
     if (!config.noToken) {
       const token = getToken();
-      console.log("token", token);
+      // console.log("token", token);
       data.UserKey = token;
     }
 
-    config.data = data; //queryString.stringify(data);
-    console.log("异步请求:", config);
+    config.data = queryString.stringify(data);
+    // console.log("异步请求:", config);
     return config;
   },
   error => {
