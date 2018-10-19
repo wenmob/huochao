@@ -5,40 +5,52 @@
 </template>
 
 <script>
+import { setToken } from "./utils/auth.js";
 export default {
-  name: 'App',
-  provide () {
+  name: "App",
+  provide() {
     return {
       reload: this.reload
-    }
+    };
   },
-  data () {
+  data() {
     return {
       isRouterAlive: true
-    }
+    };
   },
   methods: {
-    reload () {
-      this.isRouterAlive = false
+    reload() {
+      this.isRouterAlive = false;
       this.$nextTick(() => {
-        this.isRouterAlive = true
-      })
+        this.isRouterAlive = true;
+      });
+    }
+  },
+  watch: {
+    $route: {
+      handler(val) {
+        const { token } = val.query;
+        setToken(token);
+      },
+      immediate: true,
+      deep: true
     }
   }
-}
+};
 </script>
 
 <style>
-html, body{
+html,
+body {
   width: 100%;
   height: 100%;
 }
 #app {
   width: 100%;
   height: 100%;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #F2F2F2;
+  background: #f2f2f2;
 }
 </style>

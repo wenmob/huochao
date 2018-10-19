@@ -92,9 +92,13 @@
 </template>
 
 <script>
-import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit } from '@/api/supermarket'
+import {
+  getAdvertisementListByPosition,
+  getTodayPayProduct,
+  getCatAndProJsonLit
+} from "@/api/supermarket";
 export default {
-  data () {
+  data() {
     return {
       loading: true,
       finished: false,
@@ -103,116 +107,128 @@ export default {
       listObeject: [], // 类别和产品
       catIndex: 0,
       listProd: [] // 类别对应的产品
-    }
+    };
   },
   computed: {
-    listHead1 () {
-      let arr = []
+    listHead1() {
+      let arr = [];
       arr = this.listHead.filter((ele, index) => {
         if (index <= 3) {
-          return true
+          return true;
         } else {
-          return false
+          return false;
         }
-      })
-      return arr
+      });
+      return arr;
     },
-    listHead2 () {
-      let arr = []
+    listHead2() {
+      let arr = [];
       if (this.listHead.length > 4) {
         arr = this.listHead.filter((ele, index) => {
           if (index > 3) {
-            return true
+            return true;
           } else {
-            return false
+            return false;
           }
-        })
+        });
       }
-      return arr
+      return arr;
     }
   },
-  mounted () {
-    this.initOnLoad()
+  mounted() {
+    this.initOnLoad();
   },
   methods: {
     // 初始化界面
-    initOnLoad () {
+    initOnLoad() {
       let toast1 = this.$toast.loading({
         duration: 0,
         mask: true,
-        message: '加载中...'
-      })
-      Promise.all([this.getAdvertisementList(), this.getTodayPayProduct(), this.getCatAndProJsonLit()]).then(res => {
-        console.log(res)
-        toast1.clear()
-      }).catch((error) => {
-        console.log(error)
-      })
+        message: "加载中..."
+      });
+      Promise.all([
+        this.getAdvertisementList(),
+        this.getTodayPayProduct(),
+        this.getCatAndProJsonLit()
+      ])
+        .then(res => {
+          console.log(res);
+          toast1.clear();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // 获取头部的广告栏
-    getAdvertisementList () {
+    getAdvertisementList() {
       return new Promise((resolve, reject) => {
-        getAdvertisementListByPosition({ADPosition: 'H5CSTop'}).then(res => {
-          const data = res.object
-          this.listHead = data
-          resolve(1)
-        }).catch(err => {
-          reject(err)
-        })
-      })
+        getAdvertisementListByPosition({ ADPosition: "H5CSTop" })
+          .then(res => {
+            const data = res.object;
+            this.listHead = data;
+            resolve(1);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     // 获取今日下款
-    getTodayPayProduct () {
+    getTodayPayProduct() {
       return new Promise((resolve, reject) => {
-        getTodayPayProduct().then(res => {
-          const data = res.object
-          this.listToday = data
-          resolve(2)
-        }).catch(err => {
-          reject(err)
-        })
-      })
+        getTodayPayProduct()
+          .then(res => {
+            const data = res.object;
+            this.listToday = data;
+            resolve(2);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     // 获取产品类别和产品
-    getCatAndProJsonLit () {
+    getCatAndProJsonLit() {
       return new Promise((resolve, reject) => {
-        getCatAndProJsonLit().then(res => {
-          const data = res.object
-          this.loading = false
-          this.listObeject = data
-          if (this.listObeject.length > 0) {
-            this.listProd = data[0].ProLit
-            this.finished = true
-          }
-          resolve(3)
-        }).catch(err => {
-          reject(err)
-        })
-      })
+        getCatAndProJsonLit()
+          .then(res => {
+            const data = res.object;
+            this.loading = false;
+            this.listObeject = data;
+            if (this.listObeject.length > 0) {
+              this.listProd = data[0].ProLit;
+              this.finished = true;
+            }
+            resolve(3);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     // 点击头部的选择栏
-    nextPager (url) {
-      window.location.href = url
+    nextPager(url) {
+      window.location.href = url;
     },
     // 点击今日下款跳转到其他页面
-    nextOther (url) {
-      window.location.href = url
+    nextOther(url) {
+      window.location.href = url;
     },
     // 点击类别对应的产品列表
-    catProd (n) {
-      this.catIndex = n
-      this.listProd = this.listObeject[n].ProLit
+    catProd(n) {
+      this.catIndex = n;
+      this.listProd = this.listObeject[n].ProLit;
     },
     // 点击产品跳转到其他页面
-    nextProdPage (id) {
-      this.$router.push({path: '/cutDetails', query: {id: id}})
+    nextProdPage(id) {
+      this.$router.push({ path: "/cutDetails", query: { id: id } });
     }
   }
-}
+};
 </script>
 
 <style>
-@import url('../../../assets/css/common.css');
+@import url("../../../assets/css/common.css");
 .supermarket {
   border: 1px solid #f2f2f2;
 }
