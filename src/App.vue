@@ -5,38 +5,40 @@
 </template>
 
 <script>
-import { setToken } from "./utils/auth.js";
+import { setToken } from './utils/auth.js'
 export default {
-  name: "App",
-  provide() {
+  name: 'App',
+  provide () {
     return {
       reload: this.reload
-    };
-  },
-  data() {
-    return {
-      isRouterAlive: true
-    };
-  },
-  methods: {
-    reload() {
-      this.isRouterAlive = false;
-      this.$nextTick(() => {
-        this.isRouterAlive = true;
-      });
     }
   },
+  data () {
+    return {
+      isRouterAlive: true
+    }
+  },
+  methods: {
+    // 页面刷新的用法
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(() => {
+        this.isRouterAlive = true
+      })
+    }
+  },
+  // 监听token，并保存token
   watch: {
     $route: {
-      handler(val) {
-        const { token } = val.query;
-        setToken(token);
+      handler (val) {
+        const { token } = val.query
+        setToken(token)
       },
       immediate: true,
       deep: true
     }
   }
-};
+}
 </script>
 
 <style>

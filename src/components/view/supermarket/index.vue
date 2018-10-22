@@ -1,16 +1,17 @@
 <template>
   <div class="supermarket">
     <!--8个选项-->
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <div class="sk-d1">
     <van-row type="flex">
-      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="nextPager(item1.url)">
+      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="nextPager(item1.url, item1.title)">
         <img class="sk-h-m" :src="item1.imapath"/>
         <span class="sk-h-s">{{item1.title}}</span>
       </van-col>
     </van-row>
 
     <van-row type="flex" style="margin-top: 12px" v-if="listHead.length > 4">
-      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="nextPager(item2.url)">
+      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="nextPager(item2.url, item2.title)">
         <img class="sk-h-m" :src="item2.imapath"/>
         <span class="sk-h-s">{{item2.title}}</span>
       </van-col>
@@ -26,7 +27,7 @@
         <van-col span="16">
           <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
             <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="nextOther(item.urladdress)">
-              <van-col span="16" class="sk-d2-2">
+              <van-col span="15" class="sk-d2-2">
                 <span class="s1">{{item.name}}</span>
               </van-col>
               <van-col span="8" class="sk-d2-2">
@@ -88,6 +89,7 @@
       </van-list>
 
     </div>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -96,6 +98,7 @@ import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit
 export default {
   data () {
     return {
+      isLoading: false, // 是否处于下拉刷新状态
       loading: true,
       finished: false,
       listHead: [], // 头部广告list
@@ -105,6 +108,7 @@ export default {
       listProd: [] // 类别对应的产品
     }
   },
+  inject: ['reload'],
   computed: {
     listHead1 () {
       let arr = []
@@ -191,7 +195,8 @@ export default {
       })
     },
     // 点击头部的选择栏
-    nextPager (url) {
+    nextPager (url, name) {
+      document.title = name
       window.location.href = url
     },
     // 点击今日下款跳转到其他页面
@@ -206,6 +211,10 @@ export default {
     // 点击产品跳转到其他页面
     nextProdPage (id) {
       this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
+    },
+    // 下拉刷新的效果
+    onRefresh () {
+      this.reload()
     }
   }
 }
@@ -236,20 +245,21 @@ export default {
   margin-top: 7px;
 }
 .sk-d2-1 {
+  position: relative;
   height: 40px;
   border-right: 1px solid #ccc;
 }
 .sk-d2-1 .m1 {
-  float: left;
+  position: absolute;
   width: 20px;
-  margin-top: 10px;
-  margin-left: 13px;
+  top: 7px;
+  left: 38px;
 }
 .sk-d2-1 .s1 {
-  float: left;
+  position: absolute;
   font-size: 14px;
-  margin-left: 10px;
-  margin-top: 10px;
+  left: 70px;
+  top: 10px;
   font-weight: 600;
   color: #666666;
 }

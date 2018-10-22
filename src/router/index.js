@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/supermarket',
@@ -15,19 +15,19 @@ export default new Router({
       path: '/cutList',
       name: 'cutList',
       component: () => import('@/components/view/cutList'),
-      meta: { title: '口子列表' }
+      meta: { title: '产品列表' }
     },
     {
       path: '/cutDetails',
       name: 'cutDetails',
       component: () => import('@/components/view/cutDetails'),
-      meta: { title: '口子详情' }
+      meta: { title: '产品详情' }
     },
     {
       path: '/messageDesc',
       name: 'messageDesc',
       component: () => import('@/components/view/messageDesc'),
-      meta: { title: '资讯详情' }
+      meta: { title: '资讯' }
     },
     {
       path: '/myBonus',
@@ -46,6 +46,19 @@ export default new Router({
       name: 'siteMessage',
       component: () => import('@/components/view/siteMessage'),
       meta: { title: '站内信息' }
+    },
+    {
+      path: '/activityList',
+      name: 'activityList',
+      component: () => import('@/components/view/activityList'),
+      meta: { title: '活动列表' }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // console.log(to)
+  document.title = to.meta.title
+  next()
+})
+export default router
