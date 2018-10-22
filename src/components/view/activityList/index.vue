@@ -9,7 +9,7 @@
     <van-list
         v-model="loading"
         :finished="finished"
-        @load="getProductInfoListByCategoryMore"
+        @load="getProductInfoListByActivityMore"
         v-else
       >
         <van-cell
@@ -49,7 +49,7 @@ export default {
   data () {
     return {
       form: {
-        ActivityID: '5',
+        ActivityID: '1',
         pageIndex: 0,
         pageSize: 10
       },
