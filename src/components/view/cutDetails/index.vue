@@ -233,8 +233,9 @@ export default {
     },
     // 点击产品跳转到其他页面
     nextProdPage (id) {
+      this.keyvalue = false
       this.$route.query.keyvalue = id
-      this.reload()
+      this.initPage()
       // this.$router.push({path: '/cutDetails', query: {id: id}})
     },
     // 点击更多

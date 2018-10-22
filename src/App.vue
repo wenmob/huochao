@@ -1,6 +1,13 @@
 <template>
   <div id="app">
-    <router-view v-if="isRouterAlive"/>
+    <keep-alive>
+      <navigation v-if="keepAlive">
+        <router-view v-if="isRouterAlive"/>
+      </navigation>
+    </keep-alive>
+    <navigation v-if="!keepAlive">
+        <router-view v-if="isRouterAlive"/>
+    </navigation>
   </div>
 </template>
 
@@ -17,6 +24,12 @@ export default {
     return {
       isRouterAlive: true
     }
+  },
+  created () {
+    // 是否缓存
+    this.$navigation.on('back', (to, from) => {
+      this.keepAlive = true
+    })
   },
   methods: {
     // 页面刷新的用法

@@ -214,7 +214,13 @@ export default {
     },
     // 下拉刷新的效果
     onRefresh () {
-      this.reload()
+      this.keepAlive = false
+      Promise.all([this.getAdvertisementList(), this.getTodayPayProduct(), this.getCatAndProJsonLit()]).then(res => {
+        this.$toast('刷新成功')
+        this.isLoading = false
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   }
 }
