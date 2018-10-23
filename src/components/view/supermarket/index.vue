@@ -96,6 +96,7 @@
 <script>
 import {setTitile} from '@/utils/auth'
 import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit } from '@/api/supermarket'
+import { browser, Cookies } from '@/utils/hybrid'
 export default {
   data () {
     return {

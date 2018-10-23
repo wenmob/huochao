@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getProductInfoDetails, getProductInfoListByCategory, saveProductAccessRecord } from '@/api/cutDetails'
 export default {
   data () {
@@ -159,6 +160,9 @@ export default {
       // }
       return str
     }
+  },
+  created () {
+    sendMessage('tbshowmenu', true)
   },
   mounted () {
     this.initPage()
