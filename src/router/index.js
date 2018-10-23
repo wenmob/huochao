@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import {getTitile} from '@/utils/auth'
 Vue.use(Router)
 
 const router = new Router({
@@ -15,7 +15,7 @@ const router = new Router({
       path: '/cutList',
       name: 'cutList',
       component: () => import('@/components/view/cutList'),
-      meta: { title: '产品列表' }
+      meta: { title: '同类产品列表' }
     },
     {
       path: '/cutDetails',
@@ -27,7 +27,7 @@ const router = new Router({
       path: '/messageDesc',
       name: 'messageDesc',
       component: () => import('@/components/view/messageDesc'),
-      meta: { title: '资讯' }
+      meta: { title: '资讯详情' }
     },
     {
       path: '/myBonus',
@@ -45,20 +45,27 @@ const router = new Router({
       path: '/siteMessage',
       name: 'siteMessage',
       component: () => import('@/components/view/siteMessage'),
-      meta: { title: '站内信息' }
+      meta: { title: '站内信息详情' }
     },
     {
       path: '/activityList',
       name: 'activityList',
       component: () => import('@/components/view/activityList'),
-      meta: { title: '活动列表' }
+      meta: { title: '活动产品列表' }
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
   // console.log(to)
-  document.title = to.meta.title
+  if (to.meta.title) {
+    document.title = to.meta.title
+  } else {
+    if (getTitile()) {
+      document.title = getTitile()
+    }
+  }
+
   next()
 })
 export default router

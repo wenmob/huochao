@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import {setTitile} from '@/utils/auth'
 import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit } from '@/api/supermarket'
 export default {
   data () {
@@ -196,8 +197,8 @@ export default {
     },
     // 点击头部的选择栏
     nextPager (url, name) {
-      document.title = name
-      window.location.href = url
+      setTitile(name)
+      window.location.href = "wwww.baidu.com"
     },
     // 点击今日下款跳转到其他页面
     nextOther (url) {
@@ -214,7 +215,6 @@ export default {
     },
     // 下拉刷新的效果
     onRefresh () {
-      this.keepAlive = false
       Promise.all([this.getAdvertisementList(), this.getTodayPayProduct(), this.getCatAndProJsonLit()]).then(res => {
         this.$toast('刷新成功')
         this.isLoading = false

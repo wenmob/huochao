@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { setToken } from './utils/auth.js'
+import { setToken, removeTitile } from '@/utils/auth.js'
 export default {
   name: 'App',
   provide () {
@@ -22,12 +22,14 @@ export default {
   },
   data () {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
+      keepAlive: true
     }
   },
   created () {
     // 是否缓存
     this.$navigation.on('back', (to, from) => {
+      removeTitile()
       this.keepAlive = true
     })
   },

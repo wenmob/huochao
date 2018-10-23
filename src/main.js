@@ -14,13 +14,15 @@ import 'vant/lib/vant-css/index.css'
  * 引入路由的方法
  */
 import Navigation from 'vue-navigation'
+
+import mixins from './utils/mixins'
 Vue.use(Navigation, {router})
 
 require('es6-promise').polyfill() // 解决老安卓系统兼容问题
 Vue.use(Vant)
 
+Vue.use(mixins)
 Vue.config.productionTip = false
-Vue.prototype.keepAlive = true
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
