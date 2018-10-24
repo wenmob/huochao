@@ -55,6 +55,7 @@ export default {
       return new Promise((resolve, reject) => {
         getPushMsgDetails({PushMsgID: this.PushMsgID}).then(res => {
           const data = res.rows
+          document.title = res.title
           this.form = {...data}
           toast1.clear()
         }).catch(error => {

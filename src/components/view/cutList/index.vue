@@ -83,6 +83,7 @@ export default {
         getProductInfoListByCategoryMore(this.form).then(res => {
           this.loading = false
           const data = res.object
+          document.title = res.title
           if (data.length > 0) {
             this.isHas = true
           }

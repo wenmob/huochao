@@ -21,16 +21,20 @@
     <div class="sk-d2">
       <van-row type="flex">
         <van-col span="8" class="sk-d2-1">
+        <van-col span="6" class="sk-d2-1-c1">
           <img class="m1" src="../../../assets/images/money.png"/>
+        </van-col>
+        <van-col span="13">
           <span class="s1">今日下款</span>
+        </van-col>
         </van-col>
         <van-col span="16">
           <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
             <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="nextOther(item.urladdress)">
-              <van-col span="15" class="sk-d2-2">
+              <van-col span="13" class="sk-d2-2">
                 <span class="s1">{{item.name}}</span>
               </van-col>
-              <van-col span="8" class="sk-d2-2">
+              <van-col span="11" class="sk-d2-2">
                 <span class="s1" style="color: red">成功率{{item.successrate}}</span>
               </van-col>
               <!-- <van-col span="3" class="sk-d2-2">
@@ -94,9 +98,9 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import {setTitile} from '@/utils/auth'
 import { getAdvertisementListByPosition, getTodayPayProduct, getCatAndProJsonLit } from '@/api/supermarket'
-import { browser, Cookies } from '@/utils/hybrid'
 export default {
   data () {
     return {
@@ -199,7 +203,8 @@ export default {
     // 点击头部的选择栏
     nextPager (url, name) {
       setTitile(name)
-      window.location.href = "wwww.baidu.com"
+      sendMessage('set_title', {title: name})
+      window.location.href = url
     },
     // 点击今日下款跳转到其他页面
     nextOther (url) {
@@ -256,19 +261,20 @@ export default {
   height: 40px;
   border-right: 1px solid #ccc;
 }
-.sk-d2-1 .m1 {
-  position: absolute;
+.sk-d2-1-c1 {
+  margin-left: 13px;
+}
+.sk-d2-1-c1 .m1 {
+  display: inline-block;
   width: 20px;
-  top: 7px;
-  left: 38px;
+  margin-top: 6px;
 }
 .sk-d2-1 .s1 {
-  position: absolute;
+  display: inline-block;
   font-size: 14px;
-  left: 70px;
-  top: 10px;
   font-weight: 600;
   color: #666666;
+  margin-top: 10px;
 }
 .sk-d2-2 .s1 {
   float: left;

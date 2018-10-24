@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getProductInfoListByActivityMore } from '@/api/activityList'
 export default {
   data () {
@@ -59,6 +60,9 @@ export default {
       list: [],
       toast1: undefined
     }
+  },
+  created () {
+    sendMessage('tbshowmenu', true)
   },
   mounted () {
     this.toast1 = this.$toast.loading({
@@ -83,6 +87,7 @@ export default {
         getProductInfoListByActivityMore(this.form).then(res => {
           this.loading = false
           const data = res.object
+          document.title = res.title
           if (data.length > 0) {
             this.isHas = true
           }

@@ -198,6 +198,7 @@ export default {
       return new Promise((resolve, reject) => {
         getProductInfoDetails({ProductID: this.ProductID}).then(res => {
           const data = res.rows
+          document.title = res.title
           if (data.RequestForCredit === '&nbsp;' || data.RequestForCredit === null) {
             data.RequestForCredit = ''
           }
@@ -237,10 +238,10 @@ export default {
     },
     // 点击产品跳转到其他页面
     nextProdPage (id) {
-      this.$route.query.keyvalue = id
-      this.initPage()
-      document.body.scrollTop = document.documentElement.scrollTop = 0 + 'px'
-      // this.$router.push({path: '/cutDetails', query: {id: id}})
+      // this.$route.query.keyvalue = id
+      // this.initPage()
+      // document.body.scrollTop = document.documentElement.scrollTop = 0 + 'px'
+      this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
     },
     // 点击更多
     nextMore () {
