@@ -1,21 +1,21 @@
-import { sendMessage } from '@/utils/hybrid'
+import { sendMessage } from "@/utils/hybrid";
 export default {
-  install (Vue) {
+  install(Vue) {
     Vue.mixin({
-      data () {
+      data() {
         return {
-          activeTitle: ''
-        }
+          activeTitle: ""
+        };
       },
       methods: {
-        openUrl (url) {
-          if (window['huochao-is-app']) {
-            sendMessage('open_url', { url })
+        openUrl(url) {
+          if (window["huochao-is-browser"]) {
+            window.location.href = url;
           } else {
-            window.location.href = url
+            sendMessage("open_url", { url });
           }
         }
       }
-    })
+    });
   }
-}
+};
