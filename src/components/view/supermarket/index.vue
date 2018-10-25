@@ -4,14 +4,14 @@
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
     <div class="sk-d1">
     <van-row type="flex">
-      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="nextPager(item1.url, item1.title)">
+      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="openUrl(item1.url, item1.title)">
         <img class="sk-h-m" :src="item1.imapath"/>
         <span class="sk-h-s">{{item1.title}}</span>
       </van-col>
     </van-row>
 
     <van-row type="flex" style="margin-top: 12px" v-if="listHead.length > 4">
-      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="nextPager(item2.url, item2.title)">
+      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="openUrl(item2.url, item2.title)">
         <img class="sk-h-m" :src="item2.imapath"/>
         <span class="sk-h-s">{{item2.title}}</span>
       </van-col>
@@ -30,7 +30,7 @@
         </van-col>
         <van-col span="16">
           <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
-            <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="nextOther(item.urladdress)">
+            <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="openUrl(item.urladdress)">
               <van-col span="13" class="sk-d2-2">
                 <span class="s1">{{item.name}}</span>
               </van-col>
@@ -200,16 +200,16 @@ export default {
         })
       })
     },
-    // 点击头部的选择栏
-    nextPager (url, name) {
-      setTitile(name)
-      sendMessage('set_title', {title: name})
-      window.location.href = url
-    },
-    // 点击今日下款跳转到其他页面
-    nextOther (url) {
-      window.location.href = url
-    },
+    // // 点击头部的选择栏
+    // nextPager (url, name) {
+    //   setTitile(name)
+    //   sendMessage('set_title', {title: name})
+    //   window.location.href = url
+    // },
+    // // 点击今日下款跳转到其他页面
+    // nextOther (url) {
+    //   window.location.href = url
+    // },
     // 点击类别对应的产品列表
     catProd (n) {
       this.catIndex = n
@@ -217,7 +217,9 @@ export default {
     },
     // 点击产品跳转到其他页面
     nextProdPage (id) {
-      this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
+      const [origin, hash] = location.href.split('#')
+      this.openUrl(`${origin}/#/cutDetails?keyvalue=${id}`)
+      // this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
     },
     // 下拉刷新的效果
     onRefresh () {

@@ -47,7 +47,12 @@ export default {
     $route: {
       handler (val) {
         const { token } = val.query
-        setToken(token)
+        // Cookies.set("huochao-is-app", 1);
+        // 如果是地址后面带了token 说明是原生端;
+        if (token) {
+          window['huochao-is-app'] = true
+          setToken(token)
+        }
       },
       immediate: true,
       deep: true

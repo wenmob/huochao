@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getNewsDetails, saveNewsAccessRecord } from '@/api/messageDesc'
 export default {
   data () {
@@ -41,6 +42,9 @@ export default {
         Content: ''
       }
     }
+  },
+  created () {
+    sendMessage('tbshowmenu', true)
   },
   mounted () {
     this.checkNewsID()
