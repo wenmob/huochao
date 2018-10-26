@@ -141,6 +141,9 @@ export default {
       return arr
     }
   },
+  created () {
+    sendMessage('hide_share')
+  },
   mounted () {
     this.initOnLoad()
   },

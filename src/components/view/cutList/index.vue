@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getProductInfoListByCategoryMore } from '@/api/cutList'
 export default {
   data () {
@@ -59,6 +60,9 @@ export default {
       list: [],
       toast1: undefined
     }
+  },
+  created () {
+    sendMessage('hide_share')
   },
   mounted () {
     this.toast1 = this.$toast.loading({

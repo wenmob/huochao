@@ -162,7 +162,7 @@ export default {
     }
   },
   created () {
-    sendMessage('tbshowmenu', true)
+    sendMessage('show_share')
   },
   mounted () {
     this.initPage()

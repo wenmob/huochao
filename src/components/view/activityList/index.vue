@@ -62,7 +62,7 @@ export default {
     }
   },
   created () {
-    sendMessage('tbshowmenu', true)
+    sendMessage('hide_share')
   },
   mounted () {
     this.toast1 = this.$toast.loading({

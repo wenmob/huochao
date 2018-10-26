@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getPushMsgDetails } from '@/api/siteMessage'
 export default {
   data () {
@@ -33,6 +34,9 @@ export default {
         MessageContent: ''
       }
     }
+  },
+  created () {
+    sendMessage('hide_share')
   },
   mounted () {
     this.checkNewsID()

@@ -4,6 +4,12 @@ import {getTitile} from '@/utils/auth'
 Vue.use(Router)
 
 const router = new Router({
+  scrollBehavior (to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    }
+  },
   routes: [
     {
       path: '/supermarket',

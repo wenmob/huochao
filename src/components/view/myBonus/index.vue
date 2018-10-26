@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { sendMessage } from '@/utils/hybrid'
 import { getUserIntegral } from '@/api/myBonus'
 export default {
   data  () {
@@ -66,6 +67,9 @@ export default {
       finished: true,
       list: []
     }
+  },
+  created () {
+    sendMessage('hide_share')
   },
   mounted () {
     this.checkToken()
