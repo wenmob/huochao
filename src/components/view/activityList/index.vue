@@ -44,13 +44,13 @@
 </template>
 
 <script>
-import { sendMessage } from '@/utils/hybrid'
-import { getProductInfoListByActivityMore } from '@/api/activityList'
+import { sendMessage } from "@/utils/hybrid";
+import { getProductInfoListByActivityMore } from "@/api/activityList";
 export default {
-  data () {
+  data() {
     return {
       form: {
-        ActivityID: '1',
+        ActivityID: "1",
         pageIndex: 0,
         pageSize: 10
       },
@@ -59,62 +59,64 @@ export default {
       finished: false,
       list: [],
       toast1: undefined
-    }
+    };
   },
-  created () {
-    sendMessage('hide_share')
+  created() {
+    sendMessage("show_share");
   },
-  mounted () {
+  mounted() {
     this.toast1 = this.$toast.loading({
       duration: 0,
       mask: true,
-      message: '加载中...'
-    })
-    this.checkCategoryID()
-    this.getProductInfoListByActivityMore()
+      message: "加载中..."
+    });
+    this.checkCategoryID();
+    this.getProductInfoListByActivityMore();
   },
   methods: {
     // 判断是否有类Id传来
-    checkCategoryID () {
+    checkCategoryID() {
       if (this.$route.query.keyvalue) {
-        this.form.ActivityID = this.$route.query.keyvalue
+        this.form.ActivityID = this.$route.query.keyvalue;
       }
     },
     // 获取更多列表的接口
-    getProductInfoListByActivityMore () {
-      this.form.pageIndex++
+    getProductInfoListByActivityMore() {
+      this.form.pageIndex++;
       return new Promise((resolve, reject) => {
-        getProductInfoListByActivityMore(this.form).then(res => {
-          this.loading = false
-          const data = res.object
-          document.title = res.title
-          if (data.length > 0) {
-            this.isHas = true
-          }
-          for (let i = 0; i < data.length; i++) {
-            this.list.push(data[i])
-          }
-          if (data.length < this.form.pageSize) {
-            this.finished = true
-          }
-          this.toast1.clear()
-          resolve(1)
-        }).catch(error => {
-          console.log(error)
-          reject(error)
-        })
-      })
+        getProductInfoListByActivityMore(this.form)
+          .then(res => {
+            this.loading = false;
+            const data = res.object;
+            document.title = res.title;
+            if (data.length > 0) {
+              this.isHas = true;
+            }
+            for (let i = 0; i < data.length; i++) {
+              this.list.push(data[i]);
+            }
+            if (data.length < this.form.pageSize) {
+              this.finished = true;
+            }
+            this.toast1.clear();
+            resolve(1);
+          })
+          .catch(error => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
     // 点击产品跳转到其他页面
-    nextProdPage (id) {
-      this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
+    nextProdPage(id) {
+      this.$router.push({ path: "/cutDetails", query: { keyvalue: id } });
     }
   }
-}
+};
 </script>
 
 <style>
-@import url('../../../assets/css/common.css');
+@import url("../../../assets/css/common.css");
 .cutList {
   border: 1px solid #f2f2f2;
   padding-top: 10px;

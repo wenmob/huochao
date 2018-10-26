@@ -56,118 +56,124 @@
 </template>
 
 <script>
-import { sendMessage } from '@/utils/hybrid'
-import { getUserWallet } from '@/api/myWallet'
+import { sendMessage } from "@/utils/hybrid";
+import { getUserWallet } from "@/api/myWallet";
 export default {
-  data  () {
+  data() {
     return {
-      BalanceAmount: '',
-      FrozenAmount: '',
-      UserKey: 'c61d197542354f7b80154a53e6ba1298',
+      BalanceAmount: "",
+      FrozenAmount: "",
+      UserKey: "c61d197542354f7b80154a53e6ba1298",
       isHas: false,
       loading: false,
       finished: true,
       list: []
-    }
+    };
   },
-  created () {
-    sendMessage('hide_share')
+  created() {
+    sendMessage("show_share");
   },
-  mounted () {
-    this.checkToken()
-    this.getUserWallet()
+  mounted() {
+    this.checkToken();
+    this.getUserWallet();
   },
   methods: {
     // 判断是否有token传来
-    checkToken () {
+    checkToken() {
       if (this.$route.query.token) {
-        this.UserKey = this.$route.query.token
+        this.UserKey = this.$route.query.token;
       }
     },
     // 获取我的钱包
-    getUserWallet () {
+    getUserWallet() {
       let toast1 = this.$toast.loading({
         duration: 0,
         mask: true,
-        message: '加载中...'
-      })
-      getUserWallet({UserKey: this.UserKey}).then(res => {
-        this.BalanceAmount = res.BalanceAmount ? res.BalanceAmount.toFixed(2) : 0
-        this.FrozenAmount = res.FrozenAmount ? res.FrozenAmount.toFixed(2) : 0
-        res.object.forEach(ele => {
-          ele.Amount = ele.Amount ? ele.Amount.toFixed(2) : 0
-          ele.Balance = ele.Balance ? ele.Balance.toFixed(2) : 0
+        message: "加载中..."
+      });
+      getUserWallet({ UserKey: this.UserKey })
+        .then(res => {
+          this.BalanceAmount = res.BalanceAmount
+            ? res.BalanceAmount.toFixed(2)
+            : 0;
+          this.FrozenAmount = res.FrozenAmount
+            ? res.FrozenAmount.toFixed(2)
+            : 0;
+          res.object.forEach(ele => {
+            ele.Amount = ele.Amount ? ele.Amount.toFixed(2) : 0;
+            ele.Balance = ele.Balance ? ele.Balance.toFixed(2) : 0;
+          });
+          this.list = res.object;
+          if (this.list.length > 0) {
+            this.isHas = true;
+          }
+          toast1.clear();
         })
-        this.list = res.object
-        if (this.list.length > 0) {
-          this.isHas = true
-        }
-        toast1.clear()
-      }).catch(error => {
-        console.log(error)
-      })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
-}
+};
 </script>
 <style>
-  .myBonus {
-    border: 1px solid #F2F2F2;
-  }
-  .cl-d1 .m1 {
-    display: block;
-    margin-top: 100px;
-  }
-  .cl-d1 .s1{
-    display: block;
-    color: #999999;
-    font-size: 15px;
-    margin-top: 10px;
-  }
-  .myBonus-cont-d1 {
-    height: 60px;
-    background: #fff;
-  }
-  .myBonus-cont-d1 .s1{
-    float: left;
-    display: inline-block;
-    font-size: 14px;
-    color: #666666;
-    margin-left: 30px;
-    margin-top: 20px;
-  }
-  .myBonus-cont-d1 .s2{
-    float: left;
-    display: inline-block;
-    color: #333333;
-    font-size: 19px;
-    margin-left: 16px;
-    margin-top: 19px;
-  }
-  .myBonus-cont-d1 .s3{
-    float: right;
-    display: inline-block;
-    font-size: 14px;
-    color: #666666;
-    margin-right: 30px;
-    margin-top: 20px;
-  }
-  .myBonus-cont-d2 {
-    margin-top: 15px;
-    background: #fff;
-  }
-  .mb-row {
-    border-bottom: 1px solid #F2F2F2;
-  }
-  .mb-col {
-    padding: 10px 15px;
-  }
-  .mb-col .s1 {
-    color: #666666;
-    font-size: 11px;
-  }
-  .mb-col .s2 {
-    color: #666666;
-    font-size: 11px;
-  }
+.myBonus {
+  border: 1px solid #f2f2f2;
+}
+.cl-d1 .m1 {
+  display: block;
+  margin-top: 100px;
+}
+.cl-d1 .s1 {
+  display: block;
+  color: #999999;
+  font-size: 15px;
+  margin-top: 10px;
+}
+.myBonus-cont-d1 {
+  height: 60px;
+  background: #fff;
+}
+.myBonus-cont-d1 .s1 {
+  float: left;
+  display: inline-block;
+  font-size: 14px;
+  color: #666666;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+.myBonus-cont-d1 .s2 {
+  float: left;
+  display: inline-block;
+  color: #333333;
+  font-size: 19px;
+  margin-left: 16px;
+  margin-top: 19px;
+}
+.myBonus-cont-d1 .s3 {
+  float: right;
+  display: inline-block;
+  font-size: 14px;
+  color: #666666;
+  margin-right: 30px;
+  margin-top: 20px;
+}
+.myBonus-cont-d2 {
+  margin-top: 15px;
+  background: #fff;
+}
+.mb-row {
+  border-bottom: 1px solid #f2f2f2;
+}
+.mb-col {
+  padding: 10px 15px;
+}
+.mb-col .s1 {
+  color: #666666;
+  font-size: 11px;
+}
+.mb-col .s2 {
+  color: #666666;
+  font-size: 11px;
+}
 </style>

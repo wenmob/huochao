@@ -29,111 +29,115 @@
 </template>
 
 <script>
-import { sendMessage } from '@/utils/hybrid'
-import { getNewsDetails, saveNewsAccessRecord } from '@/api/messageDesc'
+import { sendMessage } from "@/utils/hybrid";
+import { getNewsDetails, saveNewsAccessRecord } from "@/api/messageDesc";
 export default {
-  data () {
+  data() {
     return {
-      NewsID: '6',
+      NewsID: "6",
       form: {
-        Title: '',
-        ReadNumber: '',
-        Source: '',
-        Content: ''
+        Title: "",
+        ReadNumber: "",
+        Source: "",
+        Content: ""
       }
-    }
+    };
   },
-  created () {
-    sendMessage('show_share')
+  created() {
+    sendMessage("show_share");
   },
-  mounted () {
-    this.checkNewsID()
-    this.getNewsDetails()
-    this.saveNewsAccessRecord()
+  mounted() {
+    this.checkNewsID();
+    this.getNewsDetails();
+    this.saveNewsAccessRecord();
   },
   methods: {
     // 判断是否有NewsID传来
-    checkNewsID () {
+    checkNewsID() {
       if (this.$route.query.keyvalue) {
-        this.NewsID = this.$route.query.keyvalue
+        this.NewsID = this.$route.query.keyvalue;
       }
     },
     // 获取资讯详情
-    getNewsDetails () {
+    getNewsDetails() {
       let toast1 = this.$toast.loading({
         duration: 0,
         mask: true,
-        message: '加载中...'
-      })
+        message: "加载中..."
+      });
       return new Promise((resolve, reject) => {
-        getNewsDetails({NewsID: this.NewsID}).then(res => {
-          const data = res.rows
-          document.title = res.title
-          this.form = {...data}
-          toast1.clear()
-        }).catch(error => {
-          console.log(error)
-          reject(error)
-        })
-      })
+        getNewsDetails({ NewsID: this.NewsID })
+          .then(res => {
+            const data = res.rows;
+            document.title = res.title;
+            this.form = { ...data };
+            toast1.clear();
+          })
+          .catch(error => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
     // 调用访问记录
-    saveNewsAccessRecord () {
+    saveNewsAccessRecord() {
       return new Promise((resolve, reject) => {
-        saveNewsAccessRecord({NewsID: this.NewsID}).then(res => {
-          console.log(res)
-          resolve(4)
-        }).catch(error => {
-          reject(error)
-          console.log(error)
-        })
-      })
+        saveNewsAccessRecord({ NewsID: this.NewsID })
+          .then(res => {
+            console.log(res);
+            resolve(4);
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error);
+          });
+      });
     }
   }
-}
+};
 </script>
 
 <style>
-  .messageDesc {
-    width: 100%;
-    height: 100%;
-    background: #fff;
-  }
-  .md-cont{
-    padding: 15px;
-  }
-  .md-cont-d1 {
-    padding-bottom: 15px;
-    border-bottom: 1px solid #EEEEEE;
-  }
-  .md-title {
-    color: #333333;
-    font-size: 26px;
-    display: block;
-  }
-  .md-cont-d2 {
-    margin-top: 10px;
-  }
-  .md-cont-d2 .s1{
-    float: left;
-    color: #999999;
-    font-size: 14px;
-  }
-  .md-cont-d2 .s2{
-    float: right;
-    color: #999999;
-    font-size: 14px;
-  }
-  .md-cont-d3 {
-    padding-top: 15px;
-  }
-  .md-cont-d3 .s1{
-    display: block;
-    font-size: 14px;
-    color: #666666;
-    line-height: 1.8;
-  }
-  .md-cont-d3 .d1{
-    margin-top: 15px;
-  }
+.messageDesc {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+.md-cont {
+  padding: 15px;
+}
+.md-cont-d1 {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eeeeee;
+}
+.md-title {
+  color: #333333;
+  font-size: 26px;
+  display: block;
+}
+.md-cont-d2 {
+  margin-top: 10px;
+}
+.md-cont-d2 .s1 {
+  float: left;
+  color: #999999;
+  font-size: 14px;
+}
+.md-cont-d2 .s2 {
+  float: right;
+  color: #999999;
+  font-size: 14px;
+}
+.md-cont-d3 {
+  padding-top: 15px;
+}
+.md-cont-d3 .s1 {
+  display: block;
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.8;
+}
+.md-cont-d3 .d1 {
+  margin-top: 15px;
+}
 </style>
