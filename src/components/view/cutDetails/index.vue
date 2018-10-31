@@ -37,7 +37,7 @@
         </van-col>
         <van-col span="8" class="cd-d2-col col2" align="center">
           <span class="s1">费用</span>
-          <span class="s3">0.04%</span>
+          <span class="s3">{{details.CostDescription}}</span>
         </van-col>
       </van-row>
       <van-row type="flex">

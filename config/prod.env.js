@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  BASE_API: '"http://47.97.166.59"'
+  BASE_API: '"https://api.puctop.com"'
 }
