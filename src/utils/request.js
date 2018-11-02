@@ -50,13 +50,14 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   ({ data, config }) => {
     // NProgress.done();
-
-    if (data.code !== 12000) {
+    if (data.code === 12000) {
       // Toast.fail(data.message)
+      return data
+    } else if (data.code === 12001) {
+      return data
+    } else {
       return Promise.reject(data)
     }
-
-    return data
   },
   (error, b, c) => {
     console.log(error)

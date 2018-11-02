@@ -1,6 +1,12 @@
 <template>
   <div class="cutDetails">
-    <van-cell class="cut-cell">
+    <!--没有产品显示-->
+    <div class="cl-d1" align="center" v-if="!isDetail">
+      <img class="m1" src="../../../assets/images/emoji.png"/>
+      <span class="s1">产品不存在</span>
+    </div>
+
+    <van-cell class="cut-cell" v-if="isDetail">
       <van-row>
         <van-col span="4">
           <img class="m1" :src="details.LogoPath"/>
@@ -19,13 +25,13 @@
       </van-row>
     </van-cell>
     <!--简介-->
-    <div class="cd-d1">
+    <div class="cd-d1" v-if="isDetail">
       <p>{{markString1}}</p>
       <p>征信要求：{{details.RequestForCredit === '' ? '无' : details.RequestForCredit}}</p>
       <!-- <p>申请攻略：{{details.ProductIntroduction}}</p> -->
     </div>
     <!--额度、期限、费用-->
-    <div class="cd-d2">
+    <div class="cd-d2" v-if="isDetail">
       <van-row type="flex">
         <van-col span="8" class="cd-d2-col col1" align="center">
           <span class="s1">额度</span>
@@ -56,21 +62,27 @@
       </van-row>
     </div>
     <!--申请攻略-->
-    <div class="cd-d3">
+    <div class="cd-d3" v-if="isDetail">
       <span class="s1">产品介绍</span>
       <div style="height: 120px" v-html="details.ProductIntroduction">
       </div>
     </div>
     <!--同类产品、更多-->
-    <div class="cd-d4">
+    <div class="cd-d4" v-if="isDetail">
       <span class="s1">同类产品</span>
       <a class="a1" @click="nextMore">更多</a>
       <div style="clear:both"></div>
+    </div>
+    <!--没有同类产品显示-->
+    <div class="cl-d1" align="center" v-if="!isHas && isDetail">
+      <img class="m1" src="../../../assets/images/emoji.png"/>
+      <span class="s1">暂无记录</span>
     </div>
      <!--列表展示-->
       <van-list
         v-model="loading"
         :finished="finished"
+        v-else
       >
         <van-cell
           v-for="item in likeProd"
@@ -100,7 +112,7 @@
          </van-row>
         </van-cell>
       </van-list>
-      <div class="footer" align="center">
+      <div class="footer" align="center" v-if="isDetail">
         <van-button type="danger" style="width: 100%; font-size: 16px;" @click="registProd(details.URLAddress)">立即申请</van-button>
       </div>
   </div>
@@ -134,7 +146,9 @@ export default {
       },
       loading: false,
       finished: true,
-      likeProd: []
+      likeProd: [],
+      isHas: false,
+      isDetail: false
     }
   },
   inject: ['reload'],
@@ -173,6 +187,7 @@ export default {
     checkProductId () {
       if (this.$route.query.keyvalue) {
         this.ProductID = this.$route.query.keyvalue
+        console.log(this.ProductID)
       }
     },
     // 初始化界面
@@ -184,8 +199,20 @@ export default {
         message: '加载中...'
       })
       this.getProductInfoDetails().then(res => {
+        if (res === '产品信息不存在') {
+          toast1.clear()
+          this.isDetail = false
+          this.$toast.fail(res)
+          return
+        }
         this.getProductInfoListByCategory(res).then(r => {
           toast1.clear()
+          console.log('加载消失')
+          if (r === '没有值') {
+            this.isHas = false
+          } else if (r === '有值') {
+            this.isHas = true
+          }
         }).catch(error => {
           console.log(error)
         })
@@ -197,14 +224,20 @@ export default {
     getProductInfoDetails () {
       return new Promise((resolve, reject) => {
         getProductInfoDetails({ProductID: this.ProductID}).then(res => {
-          const data = res.rows
-          document.title = res.title
-          if (data.RequestForCredit === '&nbsp;' || data.RequestForCredit === null) {
-            data.RequestForCredit = ''
+          // console.log(res)
+          if (res.code === 12000) {
+            const data = res.rows
+            document.title = res.title
+            if (data.RequestForCredit === '&nbsp;' || data.RequestForCredit === null) {
+              data.RequestForCredit = ''
+            }
+            // data.ProductIntroduction = data.ProductIntroduction.replace(/<[^>]+>/g, '') // 去掉所有的html标记
+            this.details = {...data}
+            this.isDetail = true
+            resolve(data.CategoryID)
+          } else if (res.code === 12001) {
+            resolve('产品信息不存在')
           }
-          // data.ProductIntroduction = data.ProductIntroduction.replace(/<[^>]+>/g, '') // 去掉所有的html标记
-          this.details = {...data}
-          resolve(data.CategoryID)
         }).catch(error => {
           reject(error)
           console.log(error)
@@ -215,9 +248,16 @@ export default {
     getProductInfoListByCategory (CategoryID) {
       return new Promise((resolve, reject) => {
         getProductInfoListByCategory({ProductCategoryID: CategoryID}).then(res => {
-          const data = res.object
-          this.likeProd = data
-          resolve(2)
+          if (res.code === 12000) {
+            const data = res.object
+            this.likeProd = data
+            console.log('有类别的情况')
+            resolve('有值')
+          } else if (res.code === 12001) {
+            this.likeProd = []
+            console.log('没有类别的情况')
+            resolve('没有值')
+          }
         }).catch(error => {
           reject(error)
           console.log(error)
@@ -413,5 +453,18 @@ export default {
 .sk-cell .dr {
   float: left;
   margin-left: 10px;
+}
+.cl-d1 {
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+.cl-d1 .m1 {
+  display: block;
+}
+.cl-d1 .s1 {
+  display: block;
+  color: #999999;
+  font-size: 16px;
+  margin-top: 10px;
 }
 </style>
