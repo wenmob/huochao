@@ -96,10 +96,8 @@
     </van-pull-refresh>
     <div class='ad' v-if='isBrowser'>
       <van-row gutter="20">
-        <van-col span="4">
-          <img src="@/assets/images/adr-logo.png" style='width:100%;'>
-        </van-col>
-        <van-col span="14">
+        <van-col span="18">
+          <img src="@/assets/images/adr-logo.png" style='width:40px;float:left;margin-right:20px;'>
           <div>下载官网APP</div>
           <div style="font-size:14px;color:#aaa;margin-top:10px">口子更多,额度更大,</div>
         </van-col>
