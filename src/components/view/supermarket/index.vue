@@ -94,7 +94,7 @@
 
     </div>
     </van-pull-refresh>
-    <div class='ad' v-if='isBrowser'>
+    <div class='ad'  @click='dolink' v-if='isBrowser'>
       <van-row gutter="20">
         <van-col span="18">
           <img src="@/assets/images/adr-logo.png" style='width:40px;float:left;margin-right:20px;'>
@@ -102,7 +102,7 @@
           <div style="font-size:14px;color:#aaa;margin-top:10px">口子更多,额度更大,</div>
         </van-col>
         <van-col span="6" class='t-right'>
-          <van-button @click='dolink' round size="small" type="primary">
+          <van-button round size="small" type="primary">
             去下载
           </van-button>
         </van-col>
@@ -280,7 +280,7 @@ export default {
         ios: "https://adrdl.nbxfkj.com/index2.html",
         android: "https://adrdl.nbxfkj.com/index.html"
       };
-      window.location.href = browser.android ? list.android : list.ios;
+      window.location.href = browser.ios ? list.ios : list.android;
     }
   }
 };
