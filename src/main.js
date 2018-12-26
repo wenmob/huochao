@@ -9,7 +9,7 @@ import 'normalize.css/normalize.css'
  * 引入vant
  */
 import Vant from 'vant'
-import 'vant/lib/vant-css/index.css'
+import 'vant/lib/index.css'
 import '@/assets/css/common.less'
 /**
  * 引入路由的方法
@@ -21,7 +21,7 @@ Vue.use(Navigation, {
   router
 })
 
-require('es6-promise').polyfill() // 解决老安卓系统兼容问题
+// require('es6-promise').polyfill() // 解决老安卓系统兼容问题/
 Vue.use(Vant)
 
 Vue.use(mixins)
@@ -30,8 +30,5 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: {
-    App
-  },
-  template: '<App/>'
+  ...App
 })

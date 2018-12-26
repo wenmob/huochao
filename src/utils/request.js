@@ -1,12 +1,16 @@
 import axios from 'axios'
-import { Toast } from 'vant'
-import { getToken } from '@/utils/auth'
+import {
+  Toast
+} from 'vant'
+import {
+  getToken
+} from '@/utils/auth'
 import queryString from 'querystring'
 // create an axios instance
-
+console.log(process.env.VUE_APP_BASE_API, "process.env.BASE_API")
 const service = axios.create({
   // baseURL: BASE_API, // api的base_url
-  baseURL: process.env.BASE_API,
+  baseURL: process.env.VUE_APP_BASE_API,
   timeout: 1000 * 10,
   // withCredentials:true
   headers: {
@@ -48,7 +52,10 @@ service.interceptors.request.use(
 
 // respone interceptor
 service.interceptors.response.use(
-  ({ data, config }) => {
+  ({
+    data,
+    config
+  }) => {
     // NProgress.done();
     if (data.code === 12000) {
       // Toast.fail(data.message)
