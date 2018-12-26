@@ -2,14 +2,14 @@
   <div class="cutDetails">
     <!--没有产品显示-->
     <div class="cl-d1" align="center" v-if="!isDetail">
-      <img class="m1" src="../../../assets/images/emoji.png"/>
+      <img class="m1" src="../../../assets/images/emoji.png">
       <span class="s1">产品不存在</span>
     </div>
 
     <van-cell class="cut-cell" v-if="isDetail">
       <van-row>
         <van-col span="4">
-          <img class="m1" :src="details.LogoPath"/>
+          <img class="m1" :src="details.LogoPath">
         </van-col>
         <van-col span="10">
           <span class="s1" style="font-size: 15px">{{details.Name}}</span>
@@ -17,7 +17,7 @@
         </van-col>
         <van-col span="9">
           <div class="d1">
-            <img class="m2" src="../../../assets/images/meb.png"/>
+            <img class="m2" src="../../../assets/images/meb.png">
             <span class="s3">成功率：</span>
             <span class="s4">{{details.SuccessRate}}</span>
           </div>
@@ -64,8 +64,7 @@
     <!--申请攻略-->
     <div class="cd-d3" v-if="isDetail">
       <span class="s1">产品介绍</span>
-      <div style="height: 120px" v-html="details.ProductIntroduction">
-      </div>
+      <div style="height: 120px" v-html="details.ProductIntroduction"></div>
     </div>
     <!--同类产品、更多-->
     <div class="cd-d4" v-if="isDetail">
@@ -75,88 +74,137 @@
     </div>
     <!--没有同类产品显示-->
     <div class="cl-d1" align="center" v-if="!isHas && isDetail">
-      <img class="m1" src="../../../assets/images/emoji.png"/>
+      <img class="m1" src="../../../assets/images/emoji.png">
       <span class="s1">暂无记录</span>
     </div>
-     <!--列表展示-->
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        v-else
+    <!--列表展示-->
+    <van-list v-model="loading" :finished="finished" v-else>
+      <van-cell
+        v-for="item in likeProd"
+        :key="item.ID"
+        class="sk-cell"
+        @click.native="nextProdPage(item.ID)"
       >
-        <van-cell
-          v-for="item in likeProd"
-          :key="item.ID"
-          class="sk-cell"
-          @click.native="nextProdPage(item.ID)"
-        >
-         <van-row type="flex">
-           <van-col span="4">
-             <img class="m1" :src="item.LogoPath"/>
-           </van-col>
-           <van-col span="20">
-             <van-row>
-               <span style="font-szie: 16px">{{item.Name}}</span>
-               <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
-               <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
-             </van-row>
-             <van-row type="flex">
-               <van-col span="10"><span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span></van-col>
-               <van-col span="7"><span>成功率:<i style="color: red">{{item.SuccessRate}}</i></span></van-col>
-               <van-col span="7"><span>{{item.InterestRateType}}<i style="color: red">{{item.InterestRateValue}}</i></span></van-col>
-             </van-row>
-             <van-row>
-               <span>{{item.Strategy}}</span>
-             </van-row>
-           </van-col>
-         </van-row>
-        </van-cell>
-      </van-list>
-      <div class="footer" align="center" v-if="isDetail">
-        <van-button type="danger" style="width: 100%; font-size: 16px;" @click="registProd(details.URLAddress)">立即申请</van-button>
+        <van-row type="flex">
+          <van-col span="4">
+            <img class="m1" :src="item.LogoPath">
+          </van-col>
+          <van-col span="20">
+            <van-row>
+              <span style="font-szie: 16px">{{item.Name}}</span>
+              <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
+              <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
+            </van-row>
+            <van-row type="flex">
+              <van-col span="10">
+                <span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span>
+              </van-col>
+              <van-col span="7">
+                <span>
+                  成功率:
+                  <i style="color: red">{{item.SuccessRate}}</i>
+                </span>
+              </van-col>
+              <van-col span="7">
+                <span>
+                  {{item.InterestRateType}}
+                  <i style="color: red">{{item.InterestRateValue}}</i>
+                </span>
+              </van-col>
+            </van-row>
+            <van-row>
+              <span>{{item.Strategy}}</span>
+            </van-row>
+          </van-col>
+        </van-row>
+      </van-cell>
+    </van-list>
+    <div class="footer" align="center" v-if="isDetail">
+      <van-button
+        type="danger"
+        style="width: 100%; font-size: 16px;"
+        @click="registProd(details.URLAddress)"
+      >立即申请</van-button>
+    </div>
+    <van-popup class="popup-info" v-model="popup.show">
+      <div>
+        <div class="t-center mb-10">快速通道渠道报备</div>
+        <div class="t-12 t-gray">内部渠道报备,请填写申请人姓名和电话,以确保申请能够获得优先审批,提高成功率.</div>
+        <div class="mb-10">
+          <div class="popup-input">
+            <van-field v-model="popup.params.name" placeholder="请输入您的真实姓名"></van-field>
+          </div>
+          <div class="popup-input">
+            <van-field v-model="popup.params.phone" placeholder="请输入您的手机号"></van-field>
+          </div>
+          <div class="popup-input">
+            <van-field v-model="popup.params.idcard" placeholder="请输入您的身份证"></van-field>
+          </div>
+          <div class="popup-input">
+            <van-field v-model="popup.params.code" placeholder="请输入图形验证">
+              <img slot="icon" src="http://iph.href.lu/100x40?text=ABCDE">
+            </van-field>
+          </div>
+        </div>
+        <van-button type="danger" block @click="doSubReg">立即申请</van-button>
       </div>
+      <div class="popup-close" @click="popup.show=false">×</div>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { sendMessage } from '@/utils/hybrid'
-import { getProductInfoDetails, getProductInfoListByCategory, saveProductAccessRecord } from '@/api/cutDetails'
+import { sendMessage } from "@/utils/hybrid";
+import {
+  getProductInfoDetails,
+  getProductInfoListByCategory,
+  saveProductAccessRecord
+} from "@/api/cutDetails";
 export default {
-  data () {
+  data() {
     return {
-      ProductID: '',
+      ProductID: "",
       details: {
-        LogoPath: '',
-        Name: '-',
-        ApplyCount: '-',
-        SuccessRate: '-',
-        Strategy: '',
-        ProductTypeName: '',
-        PaymentmethodName: '',
-        RequestForCredit: '',
-        ProductIntroduction: '',
-        LowAmountRange: '',
-        HighAmountRange: '',
-        PaymentMethod: '',
-        AuditMethod: '',
-        LoanSpeed: '',
-        LoanTerm: '',
-        CategoryID: '',
-        URLAddress: ''
+        LogoPath: "",
+        Name: "-",
+        ApplyCount: "-",
+        SuccessRate: "-",
+        Strategy: "",
+        ProductTypeName: "",
+        PaymentmethodName: "",
+        RequestForCredit: "",
+        ProductIntroduction: "",
+        LowAmountRange: "",
+        HighAmountRange: "",
+        PaymentMethod: "",
+        AuditMethod: "",
+        LoanSpeed: "",
+        LoanTerm: "",
+        CategoryID: "",
+        URLAddress: ""
       },
       loading: false,
       finished: true,
       likeProd: [],
       isHas: false,
-      isDetail: false
-    }
+      isDetail: false,
+      popup: {
+        show: true,
+        params: {
+          name: "",
+          phone: "",
+          idcard: "",
+          code: ""
+        }
+      }
+    };
   },
-  inject: ['reload'],
+  inject: ["reload"],
   computed: {
-    markString1 () {
-      let str = ''
+    markString1() {
+      let str = "";
       if (this.details.Strategy) {
-        str = str + this.details.Strategy
+        str = str + this.details.Strategy;
       }
       // if (this.details.ProductTypeName) {
       //   if (str) {
@@ -172,143 +220,163 @@ export default {
       //     str = str + this.details.PaymentmethodName
       //   }
       // }
-      return str
+      return str;
     }
   },
-  created () {
-    sendMessage('show_share')
+  created() {
+    sendMessage("show_share");
   },
-  mounted () {
-    this.initPage()
-    this.saveProductAccessRecord()
+  mounted() {
+    this.initPage();
+    this.saveProductAccessRecord();
   },
   methods: {
+    doSubReg() {
+      console.log(this.popup.params);
+      this.popup.show = false;
+    },
     // 判断是否有id传来
-    checkProductId () {
+    checkProductId() {
       if (this.$route.query.keyvalue) {
-        this.ProductID = this.$route.query.keyvalue
-        console.log(this.ProductID)
+        this.ProductID = this.$route.query.keyvalue;
+        console.log(this.ProductID);
       }
     },
     // 初始化界面
-    initPage () {
-      this.checkProductId()
+    initPage() {
+      this.checkProductId();
       let toast1 = this.$toast.loading({
         duration: 0,
         mask: true,
-        message: '加载中...'
-      })
-      this.getProductInfoDetails().then(res => {
-        if (res === '产品信息不存在') {
-          toast1.clear()
-          this.isDetail = false
-          this.$toast.fail(res)
-          return
-        }
-        this.getProductInfoListByCategory(res).then(r => {
-          toast1.clear()
-          console.log('加载消失')
-          if (r === '没有值') {
-            this.isHas = false
-          } else if (r === '有值') {
-            this.isHas = true
+        message: "加载中..."
+      });
+      this.getProductInfoDetails()
+        .then(res => {
+          if (res === "产品信息不存在") {
+            toast1.clear();
+            this.isDetail = false;
+            this.$toast.fail(res);
+            return;
           }
-        }).catch(error => {
-          console.log(error)
+          this.getProductInfoListByCategory(res)
+            .then(r => {
+              toast1.clear();
+              console.log("加载消失");
+              if (r === "没有值") {
+                this.isHas = false;
+              } else if (r === "有值") {
+                this.isHas = true;
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
         })
-      }).catch(error => {
-        console.log(error)
-      })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // 获取产品详情的页面
-    getProductInfoDetails () {
+    getProductInfoDetails() {
       return new Promise((resolve, reject) => {
-        getProductInfoDetails({ProductID: this.ProductID}).then(res => {
-          // console.log(res)
-          if (res.code === 12000) {
-            const data = res.rows
-            document.title = res.title
-            if (data.RequestForCredit === '&nbsp;' || data.RequestForCredit === null) {
-              data.RequestForCredit = ''
+        getProductInfoDetails({ ProductID: this.ProductID })
+          .then(res => {
+            // console.log(res)
+            if (res.code === 12000) {
+              const data = res.rows;
+              document.title = res.title;
+              if (
+                data.RequestForCredit === "&nbsp;" ||
+                data.RequestForCredit === null
+              ) {
+                data.RequestForCredit = "";
+              }
+              // data.ProductIntroduction = data.ProductIntroduction.replace(/<[^>]+>/g, '') // 去掉所有的html标记
+              this.details = { ...data };
+              this.isDetail = true;
+              resolve(data.CategoryID);
+            } else if (res.code === 12001) {
+              resolve("产品信息不存在");
             }
-            // data.ProductIntroduction = data.ProductIntroduction.replace(/<[^>]+>/g, '') // 去掉所有的html标记
-            this.details = {...data}
-            this.isDetail = true
-            resolve(data.CategoryID)
-          } else if (res.code === 12001) {
-            resolve('产品信息不存在')
-          }
-        }).catch(error => {
-          reject(error)
-          console.log(error)
-        })
-      })
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     // 获取同类产品
-    getProductInfoListByCategory (CategoryID) {
+    getProductInfoListByCategory(CategoryID) {
       return new Promise((resolve, reject) => {
-        getProductInfoListByCategory({ProductCategoryID: CategoryID}).then(res => {
-          if (res.code === 12000) {
-            const data = res.object
-            this.likeProd = data
-            console.log('有类别的情况')
-            resolve('有值')
-          } else if (res.code === 12001) {
-            this.likeProd = []
-            console.log('没有类别的情况')
-            resolve('没有值')
-          }
-        }).catch(error => {
-          reject(error)
-          console.log(error)
-        })
-      })
+        getProductInfoListByCategory({ ProductCategoryID: CategoryID })
+          .then(res => {
+            if (res.code === 12000) {
+              const data = res.object;
+              this.likeProd = data;
+              console.log("有类别的情况");
+              resolve("有值");
+            } else if (res.code === 12001) {
+              this.likeProd = [];
+              console.log("没有类别的情况");
+              resolve("没有值");
+            }
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     // 调用访问记录
-    saveProductAccessRecord () {
+    saveProductAccessRecord() {
       return new Promise((resolve, reject) => {
-        saveProductAccessRecord({ProductID: this.ProductID}).then(res => {
-          console.log(res)
-          resolve(4)
-        }).catch(error => {
-          reject(error)
-          console.log(error)
-        })
-      })
+        saveProductAccessRecord({ ProductID: this.ProductID })
+          .then(res => {
+            console.log(res);
+            resolve(4);
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     // 点击产品跳转到其他页面
-    nextProdPage (id) {
+    nextProdPage(id) {
       // this.$route.query.keyvalue = id
       // this.initPage()
       // document.body.scrollTop = document.documentElement.scrollTop = 0 + 'px'
-      this.$router.push({path: '/cutDetails', query: {keyvalue: id}})
+      this.$router.push({ path: "/cutDetails", query: { keyvalue: id } });
     },
     // 点击更多
-    nextMore () {
-      this.$router.push({path: '/cutList', query: {keyvalue: this.details.CategoryID}})
+    nextMore() {
+      this.$router.push({
+        path: "/cutList",
+        query: { keyvalue: this.details.CategoryID }
+      });
     },
     // 跳转到申请页面
-    registProd (url) {
-      window.location.href = url
+    registProd(url) {
+      window.location.href = url;
     }
   }
-}
+};
 </script>
 
 <style>
-@import url('../../../assets/css/common.css');
+/* @import url("../../../assets/css/common.css"); */
 .cutDetails {
   position: relative;
   padding-bottom: 64px;
 }
-.cutDetails .footer{
+.cutDetails .footer {
   position: fixed;
   width: calc(100% - 30px);
   height: 54px;
   bottom: 0px;
   left: 0px;
   padding: 10px 15px 0px 15px;
-  background-color: rgba(255,255,255, .9);
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 2000;
 }
 .cut-cell {
@@ -466,5 +534,35 @@ export default {
   color: #999999;
   font-size: 16px;
   margin-top: 10px;
+}
+</style>
+<style lang="less" scoped>
+.popup-info {
+  // position: relative;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px 15px;
+  box-sizing: border-box;
+  background: #fff;
+  .popup-input {
+    border: 1px solid #eee;
+    margin-top: 10px;
+    img {
+      display: block;
+    }
+  }
+  .popup-close {
+    border: 1px solid #bbb;
+    border-radius: 18px;
+    height: 18px;
+    width: 18px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #bbbbbb;
+    text-align: center;
+    line-height: 18px;
+  }
 }
 </style>

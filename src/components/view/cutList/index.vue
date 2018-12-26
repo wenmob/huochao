@@ -2,44 +2,55 @@
   <div class="cutList">
     <!--没有记录时的显示-->
     <div class="cl-d1" align="center" v-if="!isHas">
-      <img class="m1" src="../../../assets/images/emoji.png"/>
+      <img class="m1" src="../../../assets/images/emoji.png">
       <span class="s1">暂无记录</span>
     </div>
     <!--有记录时的显示-->
     <van-list
-        v-model="loading"
-        :finished="finished"
-        @load="getProductInfoListByCategoryMore"
-        v-else
+      v-model="loading"
+      :finished="finished"
+      @load="getProductInfoListByCategoryMore"
+      v-else
+    >
+      <van-cell
+        v-for="item in list"
+        :key="item.id"
+        class="sk-cell"
+        @click.native="nextProdPage(item.id)"
       >
-        <van-cell
-          v-for="item in list"
-          :key="item.id"
-          class="sk-cell"
-          @click.native="nextProdPage(item.id)"
-        >
-         <van-row type="flex">
-           <van-col span="4">
-             <img class="m1" :src="item.logopath"/>
-           </van-col>
-           <van-col span="20">
-             <van-row>
-               <span style="font-szie: 16px">{{item.name}}</span>
-               <van-tag type="danger" v-if="item.ishot == 1">热门口子</van-tag>
-               <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
-             </van-row>
-             <van-row type="flex">
-               <van-col span="10"><span>额度:{{item.lowamountrange}}-{{item.highamountrange}}</span></van-col>
-               <van-col span="7"><span>成功率:<i style="color:red">{{item.successrate}}</i></span></van-col>
-               <van-col span="7"><span>{{item.interestratetype}}<i style="color:red">{{item.interestratevalue}}</i></span></van-col>
-             </van-row>
-             <van-row>
-               <span>{{item.strategy}}</span>
-             </van-row>
-           </van-col>
-         </van-row>
-        </van-cell>
-      </van-list>
+        <van-row type="flex">
+          <van-col span="4">
+            <img class="m1" :src="item.logopath">
+          </van-col>
+          <van-col span="20">
+            <van-row>
+              <span style="font-szie: 16px">{{item.name}}</span>
+              <van-tag type="danger" v-if="item.ishot == 1">热门口子</van-tag>
+              <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
+            </van-row>
+            <van-row type="flex">
+              <van-col span="10">
+                <span>额度:{{item.lowamountrange}}-{{item.highamountrange}}</span>
+              </van-col>
+              <van-col span="7">
+                <span>成功率:
+                  <i style="color:red">{{item.successrate}}</i>
+                </span>
+              </van-col>
+              <van-col span="7">
+                <span>
+                  {{item.interestratetype}}
+                  <i style="color:red">{{item.interestratevalue}}</i>
+                </span>
+              </van-col>
+            </van-row>
+            <van-row>
+              <span>{{item.strategy}}</span>
+            </van-row>
+          </van-col>
+        </van-row>
+      </van-cell>
+    </van-list>
   </div>
 </template>
 
@@ -116,7 +127,7 @@ export default {
 </script>
 
 <style>
-@import url("../../../assets/css/common.css");
+/* @import url("../../../assets/css/common.css"); */
 .cutList {
   border: 1px solid #f2f2f2;
   padding-top: 10px;

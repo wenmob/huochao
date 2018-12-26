@@ -2,109 +2,137 @@
   <div class="supermarket">
     <!--8个选项-->
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <div class="sk-d1">
-    <van-row type="flex">
-      <van-col span="6" align="center" v-for="item1 in listHead1" :key="item1.id" @click.native="openUrl(item1.url, item1.title)">
-        <img class="sk-h-m" :src="item1.imapath"/>
-        <span class="sk-h-s">{{item1.title}}</span>
-      </van-col>
-    </van-row>
+      <div class="sk-d1">
+        <van-row type="flex">
+          <van-col
+            span="6"
+            align="center"
+            v-for="item1 in listHead1"
+            :key="item1.id"
+            @click.native="openUrl(item1.url, item1.title)"
+          >
+            <img class="sk-h-m" :src="item1.imapath">
+            <span class="sk-h-s">{{item1.title}}</span>
+          </van-col>
+        </van-row>
 
-    <van-row type="flex" style="margin-top: 12px" v-if="listHead.length > 4">
-      <van-col span="6" align="center" v-for="item2 in listHead2" :key="item2.id" @click.native="openUrl(item2.url, item2.title)">
-        <img class="sk-h-m" :src="item2.imapath"/>
-        <span class="sk-h-s">{{item2.title}}</span>
-      </van-col>
-    </van-row>
-    </div>
-    <!--今日下款-->
-    <div class="sk-d2">
-      <van-row type="flex">
-        <van-col span="8" class="sk-d2-1">
-        <van-col span="6" class="sk-d2-1-c1">
-          <img class="m1" src="../../../assets/images/money.png"/>
-        </van-col>
-        <van-col span="13">
-          <span class="s1">今日下款</span>
-        </van-col>
-        </van-col>
-        <van-col span="16">
-          <van-swipe :autoplay="5000" vertical style="width: 100%; height: 40px" :show-indicators="false">
-            <van-swipe-item v-for="(item,index) in listToday" :key="index" @click.native="openUrl(item.urladdress)">
-              <van-col span="13" class="sk-d2-2">
-                <span class="s1">{{item.name}}</span>
-              </van-col>
-              <van-col span="11" class="sk-d2-2">
-                <span class="s1" style="color: red">成功率{{item.successrate}}</span>
-              </van-col>
-              <!-- <van-col span="3" class="sk-d2-2">
+        <van-row type="flex" style="margin-top: 12px" v-if="listHead.length > 4">
+          <van-col
+            span="6"
+            align="center"
+            v-for="item2 in listHead2"
+            :key="item2.id"
+            @click.native="openUrl(item2.url, item2.title)"
+          >
+            <img class="sk-h-m" :src="item2.imapath">
+            <span class="sk-h-s">{{item2.title}}</span>
+          </van-col>
+        </van-row>
+      </div>
+      <!--今日下款-->
+      <div class="sk-d2">
+        <van-row type="flex">
+          <van-col span="8" class="sk-d2-1">
+            <van-col span="6" class="sk-d2-1-c1">
+              <img class="m1" src="../../../assets/images/money.png">
+            </van-col>
+            <van-col span="13">
+              <span class="s1">今日下款</span>
+            </van-col>
+          </van-col>
+          <van-col span="16">
+            <van-swipe
+              :autoplay="5000"
+              vertical
+              style="width: 100%; height: 40px"
+              :show-indicators="false"
+            >
+              <van-swipe-item
+                v-for="(item,index) in listToday"
+                :key="index"
+                @click.native="openUrl(item.urladdress)"
+              >
+                <van-col span="13" class="sk-d2-2">
+                  <span class="s1">{{item.name}}</span>
+                </van-col>
+                <van-col span="11" class="sk-d2-2">
+                  <span class="s1" style="color: red">成功率{{item.successrate}}</span>
+                </van-col>
+                <!-- <van-col span="3" class="sk-d2-2">
                 <span class="s2">18:05</span>
-              </van-col> -->
-            </van-swipe-item>
-          </van-swipe>
-        </van-col>
-      </van-row>
-    </div>
-    <!--最新口子、推荐口子、热门口子-->
-    <div class="sk-d3">
-      <van-row type="flex" class="sk-d3-head">
-        <van-col span="6"
-        align="center"
-        class="d1"
-        :style="catIndex === index ? 'background: #fff' : 'background:  #f2f2f2'"
-        v-for="(item,index) in listObeject"
-        :key="index"
-        @click.native="catProd(index)">
-          <span>{{item.Name}}</span>
-        </van-col>
-      </van-row>
-      <!--列表展示@load="getCatAndProJsonLit"-->
-      <van-list
-        v-model="loading"
-        :finished="finished"
-      >
-        <van-cell
-          v-for="item in listProd"
-          :key="item.ID"
-          class="sk-cell"
-          @click.native="nextProdPage(item.ID)"
-        >
-         <van-row type="flex">
-           <van-col span="4">
-             <img class="m1" :src="item.LogoPath"/>
-           </van-col>
-           <van-col span="20">
-             <van-row>
-               <span style="font-szie: 16px">{{item.Name}}</span>
-               <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
-               <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
-             </van-row>
-             <van-row type="flex">
-               <van-col span="10"><span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span></van-col>
-               <van-col span="7"><span>成功率:<i style="color: red">{{item.SuccessRate}}</i></span></van-col>
-               <van-col span="7"><span>{{item.InterestRateType}}<i style="color: red">{{item.InterestRateValue}}</i></span></van-col>
-             </van-row>
-             <van-row>
-               <span>{{item.Strategy}}</span>
-             </van-row>
-           </van-col>
-         </van-row>
-        </van-cell>
-      </van-list>
-
-    </div>
+                </van-col>-->
+              </van-swipe-item>
+            </van-swipe>
+          </van-col>
+        </van-row>
+      </div>
+      <!--最新口子、推荐口子、热门口子-->
+      <div class="sk-d3">
+        <van-row type="flex" class="sk-d3-head">
+          <van-col
+            span="6"
+            align="center"
+            class="d1"
+            :style="catIndex === index ? 'background: #fff' : 'background:  #f2f2f2'"
+            v-for="(item,index) in listObeject"
+            :key="index"
+            @click.native="catProd(index)"
+          >
+            <span>{{item.Name}}</span>
+          </van-col>
+        </van-row>
+        <!--列表展示@load="getCatAndProJsonLit"-->
+        <van-list v-model="loading" :finished="finished">
+          <van-cell
+            v-for="item in listProd"
+            :key="item.ID"
+            class="sk-cell"
+            @click.native="nextProdPage(item.ID)"
+          >
+            <van-row type="flex">
+              <van-col span="4">
+                <img class="m1" :src="item.LogoPath">
+              </van-col>
+              <van-col span="20">
+                <van-row>
+                  <span style="font-szie: 16px">{{item.Name}}</span>
+                  <van-tag type="danger" v-if="item.IsHot == 1">热门口子</van-tag>
+                  <van-tag style="background: #FFBF61" v-else>推荐口子</van-tag>
+                </van-row>
+                <van-row type="flex">
+                  <van-col span="10">
+                    <span>额度:{{item.LowAmountRange}}-{{item.HighAmountRange}}</span>
+                  </van-col>
+                  <van-col span="7">
+                    <span>成功率:
+                      <i style="color: red">{{item.SuccessRate}}</i>
+                    </span>
+                  </van-col>
+                  <van-col span="7">
+                    <span>
+                      {{item.InterestRateType}}
+                      <i style="color: red">{{item.InterestRateValue}}</i>
+                    </span>
+                  </van-col>
+                </van-row>
+                <van-row>
+                  <span>{{item.Strategy}}</span>
+                </van-row>
+              </van-col>
+            </van-row>
+          </van-cell>
+        </van-list>
+      </div>
     </van-pull-refresh>
-    <div class='ad'  @click='dolink' v-if='isBrowser'>
+    <div class="ad" @click="dolink" v-if="isBrowser">
       <van-row gutter="20">
         <van-col span="18">
-          <img src="@/assets/images/adr-logo.png" style='width:40px;float:left;margin-right:20px;'>
+          <img src="@/assets/images/adr-logo.png" style="width:40px;float:left;margin-right:20px;">
           <div>下载官网APP</div>
           <div style="font-size:14px;color:#aaa;margin-top:10px">口子更多,额度更大,</div>
         </van-col>
-        <van-col span="6" class='t-right'>
-          <van-button round size="small" type="primary">
-            去下载
-          </van-button>
+        <van-col span="6" class="t-right">
+          <van-button round size="small" type="primary">去下载</van-button>
         </van-col>
       </van-row>
     </div>
@@ -123,7 +151,7 @@ import {
 } from "@/api/supermarket";
 export default {
   data() {
-    const isBrowser = window['huochao-is-browser'];
+    const isBrowser = window["huochao-is-browser"];
     return {
       isBrowser,
       browser,
@@ -287,7 +315,7 @@ export default {
 </script>
 
 <style>
-@import url("../../../assets/css/common.css");
+/* @import url("../../../assets/css/common.css"); */
 .supermarket {
   border: 1px solid #f2f2f2;
   padding-bottom: 60px;

@@ -10,13 +10,16 @@ import 'normalize.css/normalize.css'
  */
 import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
+import '@/assets/css/common.less'
 /**
  * 引入路由的方法
  */
 import Navigation from 'vue-navigation'
 
 import mixins from './utils/mixins'
-Vue.use(Navigation, {router})
+Vue.use(Navigation, {
+  router
+})
 
 require('es6-promise').polyfill() // 解决老安卓系统兼容问题
 Vue.use(Vant)
@@ -27,6 +30,8 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
