@@ -158,7 +158,8 @@ import { sendMessage } from "@/utils/hybrid";
 import {
   getProductInfoDetails,
   getProductInfoListByCategory,
-  saveProductAccessRecord
+  saveProductAccessRecord,
+  你要提交的方法
 } from "@/api/cutDetails";
 export default {
   data() {
@@ -233,7 +234,20 @@ export default {
   methods: {
     doSubReg() {
       console.log(this.popup.params);
-      this.popup.show = false;
+
+      //验证
+      if (!this.popup.params.name) {
+        return this.$toast("姓名不能为空");
+      }
+
+      //异步
+      你要提交的方法(this.popup.params)
+        .then(r => {
+          this.popup.show = false; //关闭弹层:false , 开启:true
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // 判断是否有id传来
     checkProductId() {
